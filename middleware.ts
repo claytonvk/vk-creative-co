@@ -31,8 +31,9 @@ export async function middleware(request: NextRequest) {
 
   // Refresh session if expired
   const {
-    data: { user },
-  } = await supabase.auth.getUser()
+    data: { session },
+  } = await supabase.auth.getSession()
+  const user = session?.user
 
   // Protect admin routes (except login)
   if (request.nextUrl.pathname.startsWith("/admin")) {
