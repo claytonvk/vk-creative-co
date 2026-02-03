@@ -9,12 +9,25 @@ import { getFeaturedImages } from "@/lib/queries/portfolio"
 import { getFeaturedTestimonials } from "@/lib/queries/testimonials"
 
 export default async function HomePage() {
-  const [heroSettings, valueProps, featuredImages, testimonials] = await Promise.all([
-    getHeroSettings(),
-    getValueProps(),
-    getFeaturedImages(4),
-    getFeaturedTestimonials(5),
-  ])
+  let heroSettings = {}
+  let valueProps: any[] = []
+  let featuredImages: any[] = []
+  let testimonials: any[] = []
+
+  try {
+    const results = await Promise.all([
+      getHeroSettings().catch(() => ({})),
+      getValueProps().catch(() => []),
+      getFeaturedImages(4).catch(() => []),
+      getFeaturedTestimonials(5).catch(() => []),
+    ])
+    heroSettings = results[0]
+    valueProps = results[1]
+    featuredImages = results[2]
+    testimonials = results[3]
+  } catch (error) {
+    console.error("Failed to fetch homepage data:", error)
+  }
 
   return (
     <>
