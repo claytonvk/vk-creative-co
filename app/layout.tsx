@@ -13,7 +13,7 @@ const _cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: 'Lumen Studio | Photo & Video',
+  title: 'VK Studios | Photo & Video',
   description: 'Cinematic photo and video for weddings, brands, and lifestyle. Serving engaged couples and local businesses.',
   generator: 'v0.app',
   icons: {

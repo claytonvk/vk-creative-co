@@ -3,8 +3,12 @@ import { Button } from "@/components/ui/button"
 
 export function CTASection() {
   return (
-    <section className="py-24 md:py-32 bg-foreground text-primary-foreground">
-      <div className="container mx-auto px-6 text-center">
+    <section className="py-24 md:py-32 bg-gradient-to-br from-foreground via-foreground to-primary/50 text-primary-foreground relative overflow-hidden">
+      {/* Decorative shapes */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-accent/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+      <div className="absolute bottom-0 left-0 w-64 h-64 bg-secondary/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+
+      <div className="container mx-auto px-6 text-center relative">
         <p className="text-sm uppercase tracking-[0.2em] text-primary-foreground/60 mb-6">
           Ready to Begin?
         </p>

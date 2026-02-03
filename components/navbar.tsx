@@ -17,12 +17,12 @@ export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-border">
+    <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-primary/10">
       <nav className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="font-serif text-2xl tracking-wide text-foreground">
-            Lumen
+          <Link href="/" className="font-serif text-2xl tracking-wide text-foreground hover:text-primary transition-colors">
+            <span className="bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent">VK Studios</span>
           </Link>
 
           {/* Desktop Navigation */}

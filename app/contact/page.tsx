@@ -56,9 +56,15 @@ export default function ContactPage() {
   return (
     <>
       {/* Hero */}
-      <section className="py-24 md:py-32 bg-card">
-        <div className="container mx-auto px-6 text-center">
-          <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground mb-4">
+      <section className="py-24 md:py-32 bg-card relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute top-10 left-10 w-32 h-32 border-2 border-primary/20 rounded-full" />
+        <div className="absolute bottom-10 right-10 w-24 h-24 border-2 border-accent/30 rounded-full" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-secondary/40 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+
+        <div className="container mx-auto px-6 text-center relative">
+          <p className="text-sm uppercase tracking-[0.2em] text-primary mb-4">
             Contact
           </p>
           <h1 className="font-serif text-5xl md:text-6xl text-foreground mb-6">
@@ -77,7 +83,7 @@ export default function ContactPage() {
             {/* Form */}
             <div>
               {formStatus === "success" ? (
-                <div className="bg-secondary p-8 text-center">
+                <div className="bg-gradient-to-br from-secondary to-accent/20 p-8 text-center rounded-2xl border border-primary/20">
                   <CheckCircle2 className="h-16 w-16 text-primary mx-auto mb-4" />
                   <h3 className="font-serif text-2xl text-foreground mb-3">Message Sent</h3>
                   <p className="text-muted-foreground mb-6">
@@ -92,7 +98,7 @@ export default function ContactPage() {
                   <XCircle className="h-16 w-16 text-destructive mx-auto mb-4" />
                   <h3 className="font-serif text-2xl text-foreground mb-3">Something Went Wrong</h3>
                   <p className="text-muted-foreground mb-6">
-                    Please try again or email us directly at hello@lumenstudio.com
+                    Please try again or email us directly at hello@vkstudios.com
                   </p>
                   <Button onClick={() => setFormStatus("idle")} variant="outline">
                     Try Again
@@ -206,13 +212,13 @@ export default function ContactPage() {
                 <ul className="space-y-4">
                   <li>
                     <a 
-                      href="mailto:hello@lumenstudio.com"
+                      href="mailto:hello@vkstudios.com"
                       className="flex items-center gap-4 text-foreground hover:text-primary transition-colors"
                     >
-                      <span className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center">
-                        <Mail className="h-5 w-5" />
+                      <span className="w-12 h-12 rounded-2xl bg-gradient-to-br from-secondary to-accent/30 flex items-center justify-center">
+                        <Mail className="h-5 w-5 text-primary" />
                       </span>
-                      <span>hello@lumenstudio.com</span>
+                      <span>hello@vkstudios.com</span>
                     </a>
                   </li>
                   <li>
@@ -222,15 +228,15 @@ export default function ContactPage() {
                       rel="noopener noreferrer"
                       className="flex items-center gap-4 text-foreground hover:text-primary transition-colors"
                     >
-                      <span className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center">
-                        <Instagram className="h-5 w-5" />
+                      <span className="w-12 h-12 rounded-2xl bg-gradient-to-br from-secondary to-accent/30 flex items-center justify-center">
+                        <Instagram className="h-5 w-5 text-primary" />
                       </span>
-                      <span>@lumenstudio</span>
+                      <span>@vkstudios</span>
                     </a>
                   </li>
                   <li className="flex items-center gap-4 text-foreground">
-                    <span className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center">
-                      <MapPin className="h-5 w-5" />
+                    <span className="w-12 h-12 rounded-2xl bg-gradient-to-br from-secondary to-accent/30 flex items-center justify-center">
+                      <MapPin className="h-5 w-5 text-primary" />
                     </span>
                     <span>Los Angeles, California</span>
                   </li>
@@ -238,7 +244,7 @@ export default function ContactPage() {
               </div>
 
               {/* Availability */}
-              <div className="bg-secondary p-8">
+              <div className="bg-gradient-to-br from-secondary via-secondary/80 to-accent/20 p-8 rounded-2xl border border-primary/10">
                 <div className="flex items-center gap-3 mb-4">
                   <Calendar className="h-5 w-5 text-primary" />
                   <h3 className="font-serif text-xl text-foreground">Availability</h3>

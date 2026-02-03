@@ -4,35 +4,36 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Preserve user's custom colors (Cream/Off-white background, Hazy near-black foreground, etc.) */
-  --background: oklch(0.97 0.01 90);
-  --foreground: oklch(0.22 0.02 250);
-  --card: oklch(0.99 0.005 90);
-  --card-foreground: oklch(0.22 0.02 250);
-  --popover: oklch(0.99 0.005 90);
-  --popover-foreground: oklch(0.22 0.02 250);
-  /* Earthy green primary */
-  --primary: oklch(0.45 0.08 145);
+  /* Artistic color palette - richer, more saturated versions */
+  --background: oklch(0.97 0.015 90);
+  --foreground: oklch(0.22 0.03 250);
+  --card: oklch(0.99 0.01 90);
+  --card-foreground: oklch(0.22 0.03 250);
+  --popover: oklch(0.99 0.01 90);
+  --popover-foreground: oklch(0.22 0.03 250);
+  /* Rich forest green primary - more saturated */
+  --primary: oklch(0.45 0.14 145);
   --primary-foreground: oklch(0.97 0.01 90);
-  /* Muted yellow secondary */
-  --secondary: oklch(0.88 0.06 85);
-  --secondary-foreground: oklch(0.22 0.02 250);
-  --muted: oklch(0.92 0.02 90);
-  --muted-foreground: oklch(0.45 0.02 250);
-  /* Muted gold accent */
-  --accent: oklch(0.75 0.09 80);
-  --accent-foreground: oklch(0.22 0.02 250);
-  --destructive: oklch(0.55 0.2 25);
+  /* Warm golden yellow secondary - more vibrant */
+  --secondary: oklch(0.88 0.12 85);
+  --secondary-foreground: oklch(0.22 0.03 250);
+  --muted: oklch(0.94 0.03 90);
+  --muted-foreground: oklch(0.45 0.04 250);
+  /* Rich warm gold accent - bolder */
+  --accent: oklch(0.72 0.16 75);
+  --accent-foreground: oklch(0.22 0.03 250);
+  --destructive: oklch(0.55 0.22 25);
   --destructive-foreground: oklch(0.97 0.01 90);
-  --border: oklch(0.88 0.02 90);
-  --input: oklch(0.92 0.02 90);
-  --ring: oklch(0.45 0.08 145);
-  --chart-1: oklch(0.45 0.08 145);
-  --chart-2: oklch(0.75 0.09 80);
-  --chart-3: oklch(0.88 0.06 85);
-  --chart-4: oklch(0.65 0.08 145);
-  --chart-5: oklch(0.55 0.07 80);
-  --radius: 0.25rem; /* User's radius takes precedence */
+  --border: oklch(0.88 0.04 90);
+  --input: oklch(0.94 0.03 90);
+  --ring: oklch(0.45 0.14 145);
+  /* Extended artistic palette */
+  --chart-1: oklch(0.45 0.14 145);
+  --chart-2: oklch(0.72 0.16 75);
+  --chart-3: oklch(0.65 0.18 25);
+  --chart-4: oklch(0.55 0.16 280);
+  --chart-5: oklch(0.60 0.14 200);
+  --radius: 1rem; /* Softer, more artistic rounded corners */
 
   /* Add new shadcn/ui root variables not present in user's existing :root */
   --sidebar: oklch(0.985 0 0);

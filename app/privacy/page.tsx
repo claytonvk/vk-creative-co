@@ -59,7 +59,7 @@ export default function PrivacyPage() {
             <h2 className="font-serif text-2xl text-foreground mb-4">Contact Us</h2>
             <p className="text-muted-foreground leading-relaxed">
               If you have any questions about this Privacy Policy, please contact us at 
-              hello@lumenstudio.com.
+              hello@vkstudios.com.
             </p>
           </section>
         </div>

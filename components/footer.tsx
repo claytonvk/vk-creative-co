@@ -1,19 +1,34 @@
 import Link from "next/link"
-import { Instagram, Mail, MapPin } from "lucide-react"
+import { Instagram, Facebook, Mail, MapPin } from "lucide-react"
+import { getContactSettings, getSocialSettings, getFooterSettings } from "@/lib/queries/settings"
 
-export function Footer() {
+export async function Footer() {
+  const [contact, social, footer] = await Promise.all([
+    getContactSettings(),
+    getSocialSettings(),
+    getFooterSettings(),
+  ])
+
+  const email = contact.contact_email || "hello@vkstudios.com"
+  const location = contact.contact_address || "Los Angeles, CA"
+  const tagline = footer.footer_tagline || "Cinematic photo and video for the moments that matter."
+  const copyright = footer.footer_copyright || `© ${new Date().getFullYear()} VK Studios. All rights reserved.`
+
+  const instagramUrl = social.social_instagram || "https://instagram.com"
+  const facebookUrl = social.social_facebook
+  const instagramHandle = instagramUrl.split("/").pop() || "vkstudios"
+
   return (
-    <footer className="bg-foreground text-primary-foreground">
+    <footer className="bg-gradient-to-br from-foreground via-foreground to-primary/40 text-primary-foreground">
       <div className="container mx-auto px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* Brand */}
           <div className="md:col-span-2">
-            <Link href="/" className="font-serif text-3xl tracking-wide">
-              Lumen
+            <Link href="/" className="font-serif text-3xl tracking-wide bg-gradient-to-r from-primary-foreground to-accent bg-clip-text text-transparent">
+              VK Studios
             </Link>
             <p className="mt-4 text-primary-foreground/70 max-w-md leading-relaxed">
-              Cinematic photo and video for the moments that matter. 
-              Serving engaged couples and local businesses.
+              {tagline}
             </p>
           </div>
 
@@ -48,30 +63,45 @@ export function Footer() {
           <div>
             <h4 className="font-serif text-lg mb-4">Connect</h4>
             <ul className="space-y-3">
+              {instagramUrl && (
+                <li>
+                  <a
+                    href={instagramUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-primary-foreground/70 hover:text-primary-foreground transition-colors"
+                  >
+                    <Instagram className="h-4 w-4" />
+                    @{instagramHandle}
+                  </a>
+                </li>
+              )}
+              {facebookUrl && (
+                <li>
+                  <a
+                    href={facebookUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-primary-foreground/70 hover:text-primary-foreground transition-colors"
+                  >
+                    <Facebook className="h-4 w-4" />
+                    Facebook
+                  </a>
+                </li>
+              )}
               <li>
-                <a 
-                  href="https://instagram.com" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-primary-foreground/70 hover:text-primary-foreground transition-colors"
-                >
-                  <Instagram className="h-4 w-4" />
-                  @lumenstudio
-                </a>
-              </li>
-              <li>
-                <a 
-                  href="mailto:hello@lumenstudio.com"
+                <a
+                  href={`mailto:${email}`}
                   className="flex items-center gap-2 text-primary-foreground/70 hover:text-primary-foreground transition-colors"
                 >
                   <Mail className="h-4 w-4" />
-                  hello@lumenstudio.com
+                  {email}
                 </a>
               </li>
               <li>
                 <span className="flex items-center gap-2 text-primary-foreground/70">
                   <MapPin className="h-4 w-4" />
-                  Los Angeles, CA
+                  {location}
                 </span>
               </li>
             </ul>
@@ -81,7 +111,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="mt-16 pt-8 border-t border-primary-foreground/20 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-primary-foreground/50">
-            © {new Date().getFullYear()} Lumen Studio. All rights reserved.
+            {copyright}
           </p>
           <div className="flex gap-6">
             <Link href="/privacy" className="text-sm text-primary-foreground/50 hover:text-primary-foreground transition-colors">

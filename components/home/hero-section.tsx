@@ -5,8 +5,18 @@ import { Button } from "@/components/ui/button"
 import { Play } from "lucide-react"
 import { useState } from "react"
 
-export function HeroSection() {
+interface HeroSectionProps {
+  settings: Record<string, string | null>
+}
+
+export function HeroSection({ settings }: HeroSectionProps) {
   const [isPlaying, setIsPlaying] = useState(false)
+
+  const title = settings.hero_title || "Stories Worth Telling"
+  const subtitle = settings.hero_subtitle || "Cinematic visuals for weddings, brands, and the moments in between."
+  const ctaText = settings.hero_cta_text || "View Our Work"
+  const ctaLink = settings.hero_cta_link || "/portfolio"
+  const secondaryCtaText = settings.hero_secondary_cta_text || "Watch Showreel"
 
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
@@ -15,6 +25,9 @@ export function HeroSection() {
         {/* Video placeholder - in production, replace with actual video */}
         <div className="absolute inset-0 bg-[url('/images/hero-bg.jpg')] bg-cover bg-center opacity-50" />
       </div>
+      {/* Decorative accent shapes */}
+      <div className="absolute top-20 right-10 w-64 h-64 bg-accent/20 rounded-full blur-3xl" />
+      <div className="absolute bottom-20 left-10 w-48 h-48 bg-secondary/30 rounded-full blur-3xl" />
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-6 text-center text-primary-foreground">
@@ -22,22 +35,22 @@ export function HeroSection() {
           Photo & Video Studio
         </p>
         <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-medium mb-6 text-balance leading-tight">
-          Stories Worth
+          {title.split(/\s+/).slice(0, 2).join(" ")}
           <br />
-          Telling
+          {title.split(/\s+/).slice(2).join(" ")}
         </h1>
         <p className="max-w-xl mx-auto text-lg text-primary-foreground/80 mb-10 leading-relaxed">
-          Cinematic visuals for weddings, brands, and the moments in between.
+          {subtitle}
         </p>
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <Button 
-            asChild 
-            size="lg" 
+          <Button
+            asChild
+            size="lg"
             className="bg-primary-foreground text-foreground hover:bg-primary-foreground/90 px-8"
           >
-            <Link href="/portfolio">View Our Work</Link>
+            <Link href={ctaLink}>{ctaText}</Link>
           </Button>
           <Button
             variant="outline"
@@ -46,14 +59,14 @@ export function HeroSection() {
             onClick={() => setIsPlaying(!isPlaying)}
           >
             <Play className="h-4 w-4 mr-2" />
-            Watch Showreel
+            {secondaryCtaText}
           </Button>
         </div>
       </div>
 
       {/* Video Modal Placeholder */}
       {isPlaying && (
-        <div 
+        <div
           className="fixed inset-0 z-50 bg-foreground/95 flex items-center justify-center p-6"
           onClick={() => setIsPlaying(false)}
           onKeyDown={(e) => e.key === "Escape" && setIsPlaying(false)}

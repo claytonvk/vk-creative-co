@@ -13,7 +13,7 @@ export default function TermsPage() {
           <section>
             <h2 className="font-serif text-2xl text-foreground mb-4">Services</h2>
             <p className="text-muted-foreground leading-relaxed">
-              Lumen Studio provides professional photography and videography services. 
+              VK Studios provides professional photography and videography services. 
               All services are subject to availability and must be booked in advance with 
               a signed contract and deposit.
             </p>
@@ -49,7 +49,7 @@ export default function TermsPage() {
           <section>
             <h2 className="font-serif text-2xl text-foreground mb-4">Copyright & Usage</h2>
             <p className="text-muted-foreground leading-relaxed">
-              All images and videos are copyrighted by Lumen Studio. Clients receive a personal 
+              All images and videos are copyrighted by VK Studios. Clients receive a personal 
               use license for printing and sharing. Commercial use requires a separate license. 
               We retain the right to use images for portfolio and marketing purposes.
             </p>
@@ -67,7 +67,7 @@ export default function TermsPage() {
           <section>
             <h2 className="font-serif text-2xl text-foreground mb-4">Contact</h2>
             <p className="text-muted-foreground leading-relaxed">
-              For questions about these terms, please contact us at hello@lumenstudio.com. 
+              For questions about these terms, please contact us at hello@vkstudios.com. 
               Full service agreements are provided upon booking.
             </p>
           </section>
