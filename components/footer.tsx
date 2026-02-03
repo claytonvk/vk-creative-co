@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { Instagram, Facebook, Mail, MapPin } from "lucide-react"
 import { getContactSettings, getSocialSettings, getFooterSettings } from "@/lib/queries/settings"
 
@@ -9,14 +10,14 @@ export async function Footer() {
     getFooterSettings(),
   ])
 
-  const email = contact.contact_email || "hello@vkstudios.com"
+  const email = contact.contact_email || "hello@vkcreative.com"
   const location = contact.contact_address || "Los Angeles, CA"
   const tagline = footer.footer_tagline || "Cinematic photo and video for the moments that matter."
-  const copyright = footer.footer_copyright || `© ${new Date().getFullYear()} VK Studios. All rights reserved.`
+  const copyright = footer.footer_copyright || `© ${new Date().getFullYear()} VK Creative. All rights reserved.`
 
   const instagramUrl = social.social_instagram || "https://instagram.com"
   const facebookUrl = social.social_facebook
-  const instagramHandle = instagramUrl.split("/").pop() || "vkstudios"
+  const instagramHandle = instagramUrl.split("/").pop() || "vkcreative"
 
   return (
     <footer className="bg-gradient-to-br from-foreground via-foreground to-primary/40 text-primary-foreground">
@@ -24,8 +25,14 @@ export async function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* Brand */}
           <div className="md:col-span-2">
-            <Link href="/" className="font-serif text-3xl tracking-wide bg-gradient-to-r from-primary-foreground to-accent bg-clip-text text-transparent">
-              VK Studios
+            <Link href="/" className="inline-block">
+              <Image
+                src="/images/logo.png"
+                alt="VK Creative"
+                width={150}
+                height={60}
+                className="h-12 w-auto brightness-110"
+              />
             </Link>
             <p className="mt-4 text-primary-foreground/70 max-w-md leading-relaxed">
               {tagline}

@@ -17,7 +17,7 @@ ON CONFLICT (key) DO NOTHING;
 
 -- Seed initial site settings for contact info
 INSERT INTO site_settings (key, value, category, description) VALUES
-  ('contact_email', 'hello@vkstudios.com', 'contact', 'Primary contact email'),
+  ('contact_email', 'hello@vkcreative.com', 'contact', 'Primary contact email'),
   ('contact_phone', '(555) 123-4567', 'contact', 'Contact phone number'),
   ('contact_address', '123 Creative Way, Los Angeles, CA 90001', 'contact', 'Studio address'),
   ('contact_hours', 'Mon-Fri: 9am-5pm PST', 'contact', 'Business hours')
@@ -25,9 +25,9 @@ ON CONFLICT (key) DO NOTHING;
 
 -- Seed initial site settings for social links
 INSERT INTO site_settings (key, value, category, description) VALUES
-  ('social_instagram', 'https://instagram.com/vkstudios', 'social', 'Instagram profile URL'),
-  ('social_facebook', 'https://facebook.com/vkstudios', 'social', 'Facebook page URL'),
-  ('social_pinterest', 'https://pinterest.com/vkstudios', 'social', 'Pinterest profile URL'),
+  ('social_instagram', 'https://instagram.com/vkcreative', 'social', 'Instagram profile URL'),
+  ('social_facebook', 'https://facebook.com/vkcreative', 'social', 'Facebook page URL'),
+  ('social_pinterest', 'https://pinterest.com/vkcreative', 'social', 'Pinterest profile URL'),
   ('social_tiktok', '', 'social', 'TikTok profile URL')
 ON CONFLICT (key) DO NOTHING;
 
@@ -42,7 +42,7 @@ ON CONFLICT (key) DO NOTHING;
 -- Seed initial site settings for footer
 INSERT INTO site_settings (key, value, category, description) VALUES
   ('footer_tagline', 'Creating timeless memories, one frame at a time.', 'footer', 'Footer tagline'),
-  ('footer_copyright', '© 2024 VK Studios. All rights reserved.', 'footer', 'Copyright text')
+  ('footer_copyright', '© 2024 VK Creative. All rights reserved.', 'footer', 'Copyright text')
 ON CONFLICT (key) DO NOTHING;
 
 -- Seed sample value props
@@ -54,7 +54,7 @@ ON CONFLICT DO NOTHING;
 
 -- Seed sample testimonials
 INSERT INTO testimonials (quote, author_name, author_role, rating, display_order, is_featured) VALUES
-  ('Working with VK Studios was an absolute dream. They captured our wedding day perfectly and made us feel so comfortable throughout the entire process.', 'Sarah & Michael', 'Wedding Clients', 5, 1, true),
+  ('Working with VK Creative was an absolute dream. They captured our wedding day perfectly and made us feel so comfortable throughout the entire process.', 'Sarah & Michael', 'Wedding Clients', 5, 1, true),
   ('The brand photography exceeded all our expectations. The images perfectly capture our company''s essence and have elevated our entire marketing presence.', 'Jennifer Chen', 'Marketing Director', 5, 2, true),
   ('I was nervous about my portrait session, but the team made it so easy and fun. The photos turned out absolutely stunning!', 'Amanda Torres', 'Portrait Client', 5, 3, true)
 ON CONFLICT DO NOTHING;

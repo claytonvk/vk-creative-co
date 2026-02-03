@@ -14,7 +14,7 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
   // Fallback data if no testimonials from database
   const items = testimonials.length > 0 ? testimonials : [
     { id: "1", quote: "They captured our day perfectly. Every photo feels like a work of art that we'll treasure forever.", author_name: "Sarah & James", author_role: "Wedding Clients" },
-    { id: "2", quote: "Working with VK Studios transformed our brand visuals. The quality and creativity exceeded our expectations.", author_name: "Michael Chen", author_role: "Bloom Cafe Owner" },
+    { id: "2", quote: "Working with VK Creative transformed our brand visuals. The quality and creativity exceeded our expectations.", author_name: "Michael Chen", author_role: "Bloom Cafe Owner" },
     { id: "3", quote: "Professional, creative, and incredibly easy to work with. They truly understand how to tell a story.", author_name: "Emma Rodriguez", author_role: "Lifestyle Client" },
   ]
 

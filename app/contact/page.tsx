@@ -98,7 +98,7 @@ export default function ContactPage() {
                   <XCircle className="h-16 w-16 text-destructive mx-auto mb-4" />
                   <h3 className="font-serif text-2xl text-foreground mb-3">Something Went Wrong</h3>
                   <p className="text-muted-foreground mb-6">
-                    Please try again or email us directly at hello@vkstudios.com
+                    Please try again or email us directly at hello@vkcreative.com
                   </p>
                   <Button onClick={() => setFormStatus("idle")} variant="outline">
                     Try Again
@@ -212,13 +212,13 @@ export default function ContactPage() {
                 <ul className="space-y-4">
                   <li>
                     <a 
-                      href="mailto:hello@vkstudios.com"
+                      href="mailto:hello@vkcreative.com"
                       className="flex items-center gap-4 text-foreground hover:text-primary transition-colors"
                     >
                       <span className="w-12 h-12 rounded-2xl bg-gradient-to-br from-secondary to-accent/30 flex items-center justify-center">
                         <Mail className="h-5 w-5 text-primary" />
                       </span>
-                      <span>hello@vkstudios.com</span>
+                      <span>hello@vkcreative.com</span>
                     </a>
                   </li>
                   <li>
@@ -231,7 +231,7 @@ export default function ContactPage() {
                       <span className="w-12 h-12 rounded-2xl bg-gradient-to-br from-secondary to-accent/30 flex items-center justify-center">
                         <Instagram className="h-5 w-5 text-primary" />
                       </span>
-                      <span>@vkstudios</span>
+                      <span>@vkcreative</span>
                     </a>
                   </li>
                   <li className="flex items-center gap-4 text-foreground">

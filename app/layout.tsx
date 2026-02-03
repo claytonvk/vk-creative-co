@@ -7,32 +7,60 @@ import { Navbar } from '@/components/navbar'
 import { Footer } from '@/components/footer'
 
 const _inter = Inter({ subsets: ["latin"] });
-const _cormorant = Cormorant_Garamond({ 
+const _cormorant = Cormorant_Garamond({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"]
 });
 
+function getSiteUrl(): string {
+  const url = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url
+  }
+  return `https://${url}`
+}
+
 export const metadata: Metadata = {
-  title: 'VK Studios | Photo & Video',
-  description: 'Cinematic photo and video for weddings, brands, and lifestyle. Serving engaged couples and local businesses.',
-  generator: 'v0.app',
-  icons: {
-    icon: [
+  metadataBase: new URL(getSiteUrl()),
+  title: {
+    default: 'VK Creative | Cinematic Photo & Video',
+    template: '%s | VK Creative',
+  },
+  description: 'Cinematic photo and video for weddings, brands, and lifestyle. Creating timeless visual stories for engaged couples and local businesses in Los Angeles.',
+  keywords: ['wedding photography', 'videography', 'Los Angeles photographer', 'cinematic video', 'brand photography', 'lifestyle photography', 'VK Creative'],
+  authors: [{ name: 'VK Creative' }],
+  creator: 'VK Creative',
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    siteName: 'VK Creative',
+    title: 'VK Creative | Cinematic Photo & Video',
+    description: 'Cinematic photo and video for weddings, brands, and lifestyle. Creating timeless visual stories.',
+    images: [
       {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'VK Creative',
       },
     ],
-    apple: '/apple-icon.png',
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'VK Creative | Cinematic Photo & Video',
+    description: 'Cinematic photo and video for weddings, brands, and lifestyle.',
+    images: ['/og-image.png'],
+  },
+  icons: {
+    icon: [
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
+  manifest: '/site.webmanifest',
 }
 
 export default function RootLayout({

@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: GalleryPageProps) {
   }
 
   return {
-    title: `${gallery.name} | VK Studios`,
+    title: `${gallery.name} | VK Creative`,
     description: gallery.description || `View ${gallery.client_name}'s gallery`,
   }
 }

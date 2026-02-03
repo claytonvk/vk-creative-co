@@ -62,7 +62,7 @@ export default function AboutPage() {
                 The Story Behind the Lens
               </h1>
               <p className="text-muted-foreground leading-relaxed mb-6">
-                VK Studios was born from a simple belief: every moment deserves to be captured beautifully. 
+                VK Creative was born from a simple belief: every moment deserves to be captured beautifully. 
                 What started as a passion project has grown into a dedicated team of visual storytellers.
               </p>
               <p className="text-muted-foreground leading-relaxed">
@@ -74,7 +74,7 @@ export default function AboutPage() {
             <div className="relative aspect-[4/5] bg-muted rounded-2xl overflow-hidden rotate-2 hover:rotate-0 transition-transform duration-500">
               <Image
                 src="/images/about-portrait.jpg"
-                alt="VK Studios team"
+                alt="VK Creative team"
                 fill
                 className="object-cover"
               />

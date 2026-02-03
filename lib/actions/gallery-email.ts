@@ -31,7 +31,7 @@ export async function sendGalleryReadyEmail(galleryId: string) {
 
   try {
     await resend.emails.send({
-      from: "VK Studios <gallery@vkstudios.com>",
+      from: "VK Creative <gallery@vkcreative.com>",
       to: gallery.client_email,
       subject: `Your ${gallery.name} Gallery is Ready!`,
       html: `
@@ -74,7 +74,7 @@ export async function sendGalleryReadyEmail(galleryId: string) {
           <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
 
           <p style="color: #999; font-size: 12px; text-align: center;">
-            This email was sent by VK Studios. If you have any questions, please reply to this email.
+            This email was sent by VK Creative. If you have any questions, please reply to this email.
           </p>
         </body>
         </html>
@@ -115,7 +115,7 @@ export async function sendClientInviteEmail(clientId: string, galleryId: string)
 
   try {
     await resend.emails.send({
-      from: "VK Studios <gallery@vkstudios.com>",
+      from: "VK Creative <gallery@vkcreative.com>",
       to: client.email,
       subject: `You're Invited to View Your Gallery`,
       html: `
@@ -151,7 +151,7 @@ export async function sendClientInviteEmail(clientId: string, galleryId: string)
           <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
 
           <p style="color: #999; font-size: 12px; text-align: center;">
-            This email was sent by VK Studios. If you have any questions, please reply to this email.
+            This email was sent by VK Creative. If you have any questions, please reply to this email.
           </p>
         </body>
         </html>

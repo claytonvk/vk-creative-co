@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Next.js 16 marketing website for VK Studios (photography/videography). Built with v0.app and auto-synced to this repository for Vercel deployment.
+Next.js 16 marketing website for VK Creative (photography/videography). Built with v0.app and auto-synced to this repository for Vercel deployment.
 
 ## Development Commands
 
