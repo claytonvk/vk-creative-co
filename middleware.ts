@@ -31,9 +31,8 @@ export async function middleware(request: NextRequest) {
   )
 
   // Refresh session if expired - use getUser() for server-side auth validation
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: { user } } = await (supabase.auth as any).getUser()
 
   // Protect admin routes (except login)
   if (request.nextUrl.pathname.startsWith("/admin")) {
