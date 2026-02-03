@@ -1,12 +1,13 @@
 import { createServerClient } from "@supabase/ssr"
 import { NextResponse, type NextRequest } from "next/server"
+import type { Database } from "@/lib/supabase/types"
 
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
   })
 
-  const supabase = createServerClient(
+  const supabase = createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
@@ -29,11 +30,10 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  // Refresh session if expired
+  // Refresh session if expired - use getUser() for server-side auth validation
   const {
-    data: { session },
-  } = await supabase.auth.getSession()
-  const user = session?.user
+    data: { user },
+  } = await supabase.auth.getUser()
 
   // Protect admin routes (except login)
   if (request.nextUrl.pathname.startsWith("/admin")) {
