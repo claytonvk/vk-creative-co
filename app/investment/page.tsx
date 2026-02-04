@@ -61,7 +61,7 @@ export default async function InvestmentPage() {
                 return (
                   <div
                     key={pkg.id}
-                    className={`relative p-8 rounded-2xl border-2 transition-all duration-300 hover:scale-[1.02] hover:-rotate-1 ${
+                    className={`relative flex flex-col justify-between p-8 rounded-2xl border-2 transition-all duration-300 hover:scale-[1.02] hover:-rotate-1 ${
                       pkg.is_featured
                         ? "border-primary bg-gradient-to-br from-secondary via-secondary/80 to-accent/20"
                         : "border-border/50 bg-card hover:border-primary/30"
