@@ -3,8 +3,14 @@
 import Link from "next/link"
 import Image from "next/image"
 import { useState } from "react"
-import { Menu, X } from "lucide-react"
+import { Menu, X, User, Shield } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -44,9 +50,27 @@ export function Navbar() {
                 {link.label}
               </Link>
             ))}
-            <Button asChild variant="outline" className="border-primary/50 hover:bg-primary/10">
-              <Link href="/client/login">Client Login</Link>
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="border-primary/50 hover:bg-primary/10">
+                  Sign In
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem asChild>
+                  <Link href="/client/login" className="flex items-center gap-2 cursor-pointer">
+                    <User className="h-4 w-4" />
+                    Client Login
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/admin/login" className="flex items-center gap-2 cursor-pointer">
+                    <Shield className="h-4 w-4" />
+                    Admin Login
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           {/* Mobile Menu Button */}
@@ -74,9 +98,20 @@ export function Navbar() {
                   {link.label}
                 </Link>
               ))}
-              <Button asChild variant="outline" className="border-primary/50 hover:bg-primary/10 w-full mt-2">
-                <Link href="/client/login">Client Login</Link>
-              </Button>
+              <div className="flex flex-col gap-2 mt-2">
+                <Button asChild variant="outline" className="border-primary/50 hover:bg-primary/10 w-full">
+                  <Link href="/client/login" className="flex items-center gap-2" onClick={() => setIsOpen(false)}>
+                    <User className="h-4 w-4" />
+                    Client Login
+                  </Link>
+                </Button>
+                <Button asChild variant="ghost" className="w-full text-muted-foreground">
+                  <Link href="/admin/login" className="flex items-center gap-2" onClick={() => setIsOpen(false)}>
+                    <Shield className="h-4 w-4" />
+                    Admin Login
+                  </Link>
+                </Button>
+              </div>
             </div>
           </div>
         )}
