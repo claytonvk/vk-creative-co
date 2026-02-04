@@ -81,7 +81,7 @@ export default function PackagesPage() {
     setEditingPackage(pkg)
     setFormData({
       name: pkg.name,
-      price: pkg.price,
+      price: pkg.price / 100, // Convert cents to dollars for display
       price_display: pkg.price_display || "",
       description: pkg.description || "",
       features: Array.isArray(pkg.features) ? (pkg.features as string[]) : [],
@@ -113,9 +113,12 @@ export default function PackagesPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
 
+    // Convert dollars to cents for storage
+    const priceInCents = Math.round(formData.price * 100)
+
     const form = new FormData()
     form.append("name", formData.name)
-    form.append("price", String(formData.price))
+    form.append("price", String(priceInCents))
     form.append("price_display", formData.price_display)
     form.append("description", formData.description)
     form.append("features", JSON.stringify(formData.features))
@@ -285,22 +288,25 @@ export default function PackagesPage() {
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="price">Price (in cents)</Label>
-                <Input
-                  id="price"
-                  type="number"
-                  value={formData.price}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      price: parseInt(e.target.value) || 0,
-                    })
-                  }
-                  required
-                />
-                <p className="text-xs text-muted-foreground">
-                  {formatPrice(formData.price)}
-                </p>
+                <Label htmlFor="price">Price (USD)</Label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+                  <Input
+                    id="price"
+                    type="number"
+                    min="0"
+                    step="1"
+                    value={formData.price}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        price: parseFloat(e.target.value) || 0,
+                      })
+                    }
+                    className="pl-7"
+                    required
+                  />
+                </div>
               </div>
 
               <div className="space-y-2">

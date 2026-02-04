@@ -5,6 +5,48 @@ import { nanoid } from "nanoid"
 import { createClient, isAdmin } from "@/lib/supabase/server"
 import type { ClientGallery, GalleryMedia } from "@/lib/supabase/types"
 
+// Generate a URL-friendly slug from a name
+function generateSlugBase(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "") // Remove special chars
+    .replace(/\s+/g, "-") // Replace spaces with hyphens
+    .replace(/-+/g, "-") // Collapse multiple hyphens
+    .replace(/^-|-$/g, "") // Trim hyphens from ends
+    || "gallery"
+}
+
+// Generate a unique slug by checking for collisions
+async function generateUniqueSlug(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  name: string,
+  excludeId?: string
+): Promise<string> {
+  const baseSlug = generateSlugBase(name)
+  let slug = baseSlug
+  let counter = 0
+
+  while (true) {
+    let query = supabase
+      .from("client_galleries")
+      .select("id")
+      .eq("slug", slug)
+
+    if (excludeId) {
+      query = query.neq("id", excludeId)
+    }
+
+    const { data } = await query.single()
+
+    if (!data) {
+      return slug
+    }
+
+    counter++
+    slug = `${baseSlug}-${counter}`
+  }
+}
+
 export async function getGalleries() {
   const supabase = await createClient()
   const { data, error } = await supabase
@@ -47,10 +89,14 @@ export async function createGallery(formData: FormData) {
   const allow_downloads = formData.get("allow_downloads") !== "false"
   const allow_bulk_download = formData.get("allow_bulk_download") !== "false"
 
+  // Generate a unique slug from the gallery name
+  const slug = await generateUniqueSlug(supabase, name)
+
   const { data, error } = await supabase
     .from("client_galleries")
     .insert({
       name,
+      slug,
       client_name,
       client_email,
       event_date: event_date || null,
@@ -92,10 +138,24 @@ export async function updateGallery(id: string, formData: FormData) {
   const allow_bulk_download = formData.get("allow_bulk_download") === "true"
   const cover_image_url = formData.get("cover_image_url") as string | null
 
+  // Get current gallery to check if name changed
+  const { data: currentGallery } = await supabase
+    .from("client_galleries")
+    .select("name, slug")
+    .eq("id", id)
+    .single()
+
+  // Regenerate slug if name changed
+  let slug = currentGallery?.slug
+  if (currentGallery && currentGallery.name !== name) {
+    slug = await generateUniqueSlug(supabase, name, id)
+  }
+
   const { data, error } = await supabase
     .from("client_galleries")
     .update({
       name,
+      slug,
       client_name,
       client_email,
       event_date: event_date || null,

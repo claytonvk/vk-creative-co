@@ -42,7 +42,7 @@ export default async function ClientDashboardPage() {
           {galleries.map((gallery) => (
             <Link
               key={gallery.id}
-              href={`/gallery/${gallery.access_token}`}
+              href={`/gallery/${gallery.slug}`}
               className="group"
             >
               <Card className="overflow-hidden transition-shadow hover:shadow-lg">

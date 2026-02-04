@@ -180,7 +180,7 @@ export default function GalleryEditPage() {
 
   function copyGalleryLink() {
     if (!gallery) return
-    const url = `${window.location.origin}/gallery/${gallery.access_token}`
+    const url = `${window.location.origin}/gallery/${gallery.slug}`
     navigator.clipboard.writeText(url)
     toast.success("Gallery link copied to clipboard")
   }
@@ -241,7 +241,7 @@ export default function GalleryEditPage() {
             <CardContent className="space-y-4">
               <div className="flex gap-2">
                 <Input
-                  value={`${typeof window !== "undefined" ? window.location.origin : ""}/gallery/${gallery.access_token}`}
+                  value={`${typeof window !== "undefined" ? window.location.origin : ""}/gallery/${gallery.slug}`}
                   readOnly
                   className="font-mono text-sm"
                 />
@@ -253,7 +253,7 @@ export default function GalleryEditPage() {
                   <Button
                     variant="outline"
                     onClick={() =>
-                      window.open(`/gallery/${gallery.access_token}`, "_blank")
+                      window.open(`/gallery/${gallery.slug}`, "_blank")
                     }
                   >
                     <ExternalLink className="mr-2 h-4 w-4" />

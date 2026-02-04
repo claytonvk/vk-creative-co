@@ -1,7 +1,6 @@
 "use client"
 
-import { useState } from "react"
-import { Download, Play } from "lucide-react"
+import { Download, Play, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import type { GalleryMedia } from "@/lib/supabase/types"
 
@@ -10,6 +9,9 @@ interface GalleryGridProps {
   onItemClick: (index: number) => void
   allowDownloads: boolean
   galleryId: string
+  isSelectionMode?: boolean
+  selectedIds?: Set<string>
+  onToggleSelection?: (id: string) => void
 }
 
 export function GalleryGrid({
@@ -17,6 +19,9 @@ export function GalleryGrid({
   onItemClick,
   allowDownloads,
   galleryId,
+  isSelectionMode = false,
+  selectedIds = new Set(),
+  onToggleSelection,
 }: GalleryGridProps) {
   const handleDownload = async (e: React.MouseEvent, item: GalleryMedia) => {
     e.stopPropagation()
@@ -39,54 +44,98 @@ export function GalleryGrid({
     }
   }
 
+  const handleClick = (e: React.MouseEvent, index: number, itemId: string) => {
+    if (isSelectionMode && onToggleSelection) {
+      e.preventDefault()
+      onToggleSelection(itemId)
+    } else {
+      onItemClick(index)
+    }
+  }
+
+  const handleCheckboxClick = (e: React.MouseEvent, itemId: string) => {
+    e.stopPropagation()
+    onToggleSelection?.(itemId)
+  }
+
   return (
     <div className="gallery-grid container mx-auto px-4 pb-12">
       <div className="columns-1 gap-4 sm:columns-2 md:columns-3 lg:columns-4">
-        {media.map((item, index) => (
-          <div
-            key={item.id}
-            className="group relative mb-4 cursor-pointer break-inside-avoid overflow-hidden rounded-lg"
-            onClick={() => onItemClick(index)}
-          >
-            {item.file_type === "video" ? (
-              <div className="relative aspect-video bg-black">
-                <video
-                  src={item.file_url}
-                  className="h-full w-full object-cover"
-                  muted
-                  playsInline
-                  preload="metadata"
-                />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="rounded-full bg-white/90 p-3">
-                    <Play className="h-6 w-6 text-black" />
+        {media.map((item, index) => {
+          const isSelected = selectedIds.has(item.id)
+
+          return (
+            <div
+              key={item.id}
+              className={`group relative mb-4 cursor-pointer break-inside-avoid overflow-hidden rounded-lg transition-all ${
+                isSelected ? "ring-2 ring-primary ring-offset-2" : ""
+              }`}
+              onClick={(e) => handleClick(e, index, item.id)}
+            >
+              {item.file_type === "video" ? (
+                <div className="relative aspect-video bg-black">
+                  <video
+                    src={item.file_url}
+                    className={`h-full w-full object-cover transition-opacity ${
+                      isSelected ? "opacity-80" : ""
+                    }`}
+                    muted
+                    playsInline
+                    preload="metadata"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="rounded-full bg-white/90 p-3">
+                      <Play className="h-6 w-6 text-black" />
+                    </div>
                   </div>
                 </div>
-              </div>
-            ) : (
-              <img
-                src={item.file_url}
-                alt=""
-                className="w-full transition-transform duration-300 group-hover:scale-105"
-                loading="lazy"
-              />
-            )}
+              ) : (
+                <img
+                  src={item.file_url}
+                  alt=""
+                  className={`w-full transition-all duration-300 ${
+                    isSelected ? "opacity-80" : "group-hover:scale-105"
+                  }`}
+                  loading="lazy"
+                />
+              )}
 
-            {/* Overlay with download button */}
-            {allowDownloads && (
-              <div className="absolute inset-0 flex items-end justify-end bg-gradient-to-t from-black/50 to-transparent p-3 opacity-0 transition-opacity group-hover:opacity-100">
-                <Button
-                  size="icon"
-                  variant="secondary"
-                  className="h-8 w-8"
-                  onClick={(e) => handleDownload(e, item)}
+              {/* Selection checkbox */}
+              {allowDownloads && (
+                <button
+                  type="button"
+                  className={`absolute left-3 top-3 flex h-6 w-6 items-center justify-center rounded-full border-2 transition-all ${
+                    isSelected
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-white bg-black/30 text-white opacity-0 group-hover:opacity-100"
+                  } ${isSelectionMode ? "opacity-100" : ""}`}
+                  onClick={(e) => handleCheckboxClick(e, item.id)}
                 >
-                  <Download className="h-4 w-4" />
-                </Button>
-              </div>
-            )}
-          </div>
-        ))}
+                  {isSelected && <Check className="h-4 w-4" />}
+                </button>
+              )}
+
+              {/* Selected indicator overlay */}
+              {isSelected && (
+                <div className="absolute inset-0 bg-primary/10 pointer-events-none" />
+              )}
+
+              {/* Overlay with download button */}
+              {allowDownloads && !isSelectionMode && (
+                <div className="absolute inset-0 flex items-end justify-end bg-gradient-to-t from-black/50 to-transparent p-3 opacity-0 transition-opacity group-hover:opacity-100">
+                  <Button
+                    size="icon"
+                    variant="secondary"
+                    className="h-8 w-8"
+                    onClick={(e) => handleDownload(e, item)}
+                  >
+                    <Download className="h-4 w-4" />
+                  </Button>
+                </div>
+              )}
+            </div>
+          )
+        })}
       </div>
     </div>
   )

@@ -2,14 +2,20 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Download, Loader2 } from "lucide-react"
+import { Download, Loader2, CheckSquare, Square } from "lucide-react"
 import type { ClientGalleryWithMedia } from "@/lib/supabase/types"
 
 interface GalleryHeaderProps {
   gallery: ClientGalleryWithMedia
+  isSelectionMode?: boolean
+  onToggleSelectionMode?: () => void
 }
 
-export function GalleryHeader({ gallery }: GalleryHeaderProps) {
+export function GalleryHeader({
+  gallery,
+  isSelectionMode = false,
+  onToggleSelectionMode,
+}: GalleryHeaderProps) {
   const [isDownloading, setIsDownloading] = useState(false)
 
   const handleDownloadAll = async () => {
@@ -65,10 +71,30 @@ export function GalleryHeader({ gallery }: GalleryHeaderProps) {
           </p>
         )}
 
-        <div className="mt-8 flex items-center justify-center gap-4">
+        <div className="mt-8 flex items-center justify-center gap-3 flex-wrap">
           <p className="text-sm opacity-60">
             {gallery.gallery_media?.length || 0} photos
           </p>
+
+          {gallery.allow_downloads && (
+            <Button
+              onClick={onToggleSelectionMode}
+              variant="outline"
+              className="gallery-button"
+            >
+              {isSelectionMode ? (
+                <>
+                  <CheckSquare className="mr-2 h-4 w-4" />
+                  Cancel Selection
+                </>
+              ) : (
+                <>
+                  <Square className="mr-2 h-4 w-4" />
+                  Select Photos
+                </>
+              )}
+            </Button>
+          )}
 
           {gallery.allow_downloads && gallery.allow_bulk_download && (
             <Button

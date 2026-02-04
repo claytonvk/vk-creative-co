@@ -1,15 +1,15 @@
 import { notFound } from "next/navigation"
-import { getGalleryByToken } from "@/lib/queries/galleries"
+import { getGalleryBySlug } from "@/lib/queries/galleries"
 import { trackGalleryView } from "@/lib/actions/gallery-analytics"
 import { GalleryView } from "@/components/gallery/gallery-view"
 
 interface GalleryPageProps {
-  params: Promise<{ token: string }>
+  params: Promise<{ slug: string }>
 }
 
 export async function generateMetadata({ params }: GalleryPageProps) {
-  const { token } = await params
-  const gallery = await getGalleryByToken(token)
+  const { slug } = await params
+  const gallery = await getGalleryBySlug(slug)
 
   if (!gallery) {
     return {
@@ -24,8 +24,8 @@ export async function generateMetadata({ params }: GalleryPageProps) {
 }
 
 export default async function GalleryPage({ params }: GalleryPageProps) {
-  const { token } = await params
-  const gallery = await getGalleryByToken(token)
+  const { slug } = await params
+  const gallery = await getGalleryBySlug(slug)
 
   if (!gallery) {
     notFound()

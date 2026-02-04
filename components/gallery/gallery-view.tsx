@@ -5,6 +5,7 @@ import type { ClientGalleryWithMedia } from "@/lib/supabase/types"
 import { GalleryHeader } from "./gallery-header"
 import { GalleryGrid } from "./gallery-grid"
 import { GalleryLightbox } from "./gallery-lightbox"
+import { GallerySelectionBar } from "./gallery-selection-bar"
 import { MinimalTheme } from "./themes/minimal"
 import { RomanticTheme } from "./themes/romantic"
 import { EditorialTheme } from "./themes/editorial"
@@ -15,6 +16,8 @@ interface GalleryViewProps {
 
 export function GalleryView({ gallery }: GalleryViewProps) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+  const [isSelectionMode, setIsSelectionMode] = useState(false)
 
   const ThemeWrapper = {
     minimal: MinimalTheme,
@@ -23,7 +26,9 @@ export function GalleryView({ gallery }: GalleryViewProps) {
   }[gallery.theme]
 
   const openLightbox = (index: number) => {
-    setLightboxIndex(index)
+    if (!isSelectionMode) {
+      setLightboxIndex(index)
+    }
   }
 
   const closeLightbox = () => {
@@ -45,14 +50,58 @@ export function GalleryView({ gallery }: GalleryViewProps) {
     }
   }
 
+  const toggleSelection = (id: string) => {
+    const newSelected = new Set(selectedIds)
+    if (newSelected.has(id)) {
+      newSelected.delete(id)
+    } else {
+      newSelected.add(id)
+    }
+    setSelectedIds(newSelected)
+
+    // Auto-enable selection mode when first item is selected
+    if (newSelected.size > 0 && !isSelectionMode) {
+      setIsSelectionMode(true)
+    }
+    // Auto-disable selection mode when all items are deselected
+    if (newSelected.size === 0) {
+      setIsSelectionMode(false)
+    }
+  }
+
+  const selectAll = () => {
+    if (gallery.gallery_media) {
+      setSelectedIds(new Set(gallery.gallery_media.map(m => m.id)))
+      setIsSelectionMode(true)
+    }
+  }
+
+  const clearSelection = () => {
+    setSelectedIds(new Set())
+    setIsSelectionMode(false)
+  }
+
   return (
     <ThemeWrapper>
-      <GalleryHeader gallery={gallery} />
+      <GalleryHeader
+        gallery={gallery}
+        isSelectionMode={isSelectionMode}
+        onToggleSelectionMode={() => {
+          if (isSelectionMode) {
+            clearSelection()
+          } else {
+            setIsSelectionMode(true)
+          }
+        }}
+      />
       <GalleryGrid
         media={gallery.gallery_media || []}
         onItemClick={openLightbox}
         allowDownloads={gallery.allow_downloads}
         galleryId={gallery.id}
+        isSelectionMode={isSelectionMode}
+        selectedIds={selectedIds}
+        onToggleSelection={toggleSelection}
       />
       {lightboxIndex !== null && gallery.gallery_media && (
         <GalleryLightbox
@@ -63,6 +112,17 @@ export function GalleryView({ gallery }: GalleryViewProps) {
           onPrevious={goToPrevious}
           allowDownloads={gallery.allow_downloads}
           galleryId={gallery.id}
+        />
+      )}
+      {gallery.allow_downloads && selectedIds.size > 0 && (
+        <GallerySelectionBar
+          selectedCount={selectedIds.size}
+          totalCount={gallery.gallery_media?.length || 0}
+          selectedIds={Array.from(selectedIds)}
+          galleryId={gallery.id}
+          galleryName={gallery.name}
+          onSelectAll={selectAll}
+          onClearSelection={clearSelection}
         />
       )}
     </ThemeWrapper>

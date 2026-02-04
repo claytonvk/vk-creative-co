@@ -138,8 +138,8 @@ export default function GalleriesPage() {
     }
   }
 
-  function copyGalleryLink(token: string) {
-    const url = `${window.location.origin}/gallery/${token}`
+  function copyGalleryLink(slug: string) {
+    const url = `${window.location.origin}/gallery/${slug}`
     navigator.clipboard.writeText(url)
     toast.success("Gallery link copied to clipboard")
   }
@@ -215,7 +215,7 @@ export default function GalleriesPage() {
             size="icon"
             onClick={(e) => {
               e.stopPropagation()
-              copyGalleryLink(item.access_token)
+              copyGalleryLink(item.slug)
             }}
             title="Copy link"
           >
@@ -227,7 +227,7 @@ export default function GalleriesPage() {
               size="icon"
               onClick={(e) => {
                 e.stopPropagation()
-                window.open(`/gallery/${item.access_token}`, "_blank")
+                window.open(`/gallery/${item.slug}`, "_blank")
               }}
               title="View gallery"
             >

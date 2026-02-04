@@ -29,6 +29,33 @@ export async function getGalleryByToken(token: string) {
   return data
 }
 
+export async function getGalleryBySlug(slug: string) {
+  const supabase = await createClient()
+
+  const { data, error } = await supabase
+    .from("client_galleries")
+    .select("*, gallery_media(*)")
+    .eq("slug", slug)
+    .eq("is_published", true)
+    .single()
+
+  if (error) {
+    return null
+  }
+
+  // Check if expired
+  if (data.expires_at && new Date(data.expires_at) < new Date()) {
+    return null
+  }
+
+  // Sort media by display_order
+  if (data.gallery_media) {
+    data.gallery_media.sort((a, b) => a.display_order - b.display_order)
+  }
+
+  return data
+}
+
 export async function getClientGalleries(clientId: string) {
   const supabase = await createClient()
 

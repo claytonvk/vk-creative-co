@@ -27,7 +27,7 @@ export async function sendGalleryReadyEmail(galleryId: string) {
     return { error: "Gallery must be published before sending notification" }
   }
 
-  const galleryUrl = `${siteUrl}/gallery/${gallery.access_token}`
+  const galleryUrl = `${siteUrl}/gallery/${gallery.slug}`
 
   try {
     await resend.emails.send({
