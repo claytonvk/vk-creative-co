@@ -44,8 +44,8 @@ export function Navbar() {
                 {link.label}
               </Link>
             ))}
-            <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
-              <Link href="/contact">Book Now</Link>
+            <Button asChild variant="outline" className="border-primary/50 hover:bg-primary/10">
+              <Link href="/client/login">Client Login</Link>
             </Button>
           </div>
 
@@ -74,8 +74,8 @@ export function Navbar() {
                   {link.label}
                 </Link>
               ))}
-              <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90 w-full mt-2">
-                <Link href="/contact">Book Now</Link>
+              <Button asChild variant="outline" className="border-primary/50 hover:bg-primary/10 w-full mt-2">
+                <Link href="/client/login">Client Login</Link>
               </Button>
             </div>
           </div>
