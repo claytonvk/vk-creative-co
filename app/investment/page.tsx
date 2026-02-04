@@ -9,12 +9,22 @@ import {
 } from "@/components/ui/accordion"
 import { getPackages, formatPrice } from "@/lib/queries/packages"
 import { getFAQs } from "@/lib/queries/faqs"
+import { getInvestmentSettings } from "@/lib/queries/settings"
 
 export default async function InvestmentPage() {
-  const [packages, faqs] = await Promise.all([
+  const [packages, faqs, settings] = await Promise.all([
     getPackages(),
     getFAQs(),
+    getInvestmentSettings().catch(() => ({})),
   ])
+
+  const tagline = settings.investment_tagline || "Pricing"
+  const title = settings.investment_title || "Investment"
+  const description = settings.investment_description || "Transparent pricing for exceptional work. Every package is customizable to fit your unique needs."
+
+  const ctaTitle = settings.investment_cta_title || "Ready to book your session?"
+  const ctaDescription = settings.investment_cta_description || "Let's discuss your vision and create something beautiful together."
+  const customText = settings.investment_custom_text || "Looking for something different?"
 
   return (
     <>
@@ -26,13 +36,13 @@ export default async function InvestmentPage() {
 
         <div className="container mx-auto px-6 text-center relative">
           <p className="text-sm uppercase tracking-[0.2em] text-primary mb-4">
-            Pricing
+            {tagline}
           </p>
           <h1 className="font-serif text-5xl md:text-6xl text-foreground mb-6">
-            Investment
+            {title}
           </h1>
           <p className="max-w-xl mx-auto text-muted-foreground leading-relaxed">
-            Transparent pricing for exceptional work. Every package is customizable to fit your unique needs.
+            {description}
           </p>
         </div>
       </section>
@@ -95,7 +105,7 @@ export default async function InvestmentPage() {
           )}
 
           <p className="text-center text-muted-foreground mt-12">
-            Looking for something different?{" "}
+            {customText}{" "}
             <Link href="/contact" className="text-foreground underline hover:no-underline">
               Contact us
             </Link>{" "}
@@ -143,10 +153,10 @@ export default async function InvestmentPage() {
 
         <div className="container mx-auto px-6 text-center relative">
           <h2 className="font-serif text-3xl md:text-4xl mb-6">
-            Ready to book your session?
+            {ctaTitle}
           </h2>
           <p className="text-primary-foreground/70 mb-8 max-w-md mx-auto">
-            {"Let's discuss your vision and create something beautiful together."}
+            {ctaDescription}
           </p>
           <Button
             asChild

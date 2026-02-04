@@ -162,3 +162,66 @@ export const getFooterSettings = unstable_cache(
   ["footer-settings"],
   { revalidate: 60, tags: ["settings", "footer"] }
 )
+
+export const getCTASettings = unstable_cache(
+  async () => {
+    const supabase = createPublicClient()
+    const { data, error } = await supabase
+      .from("site_settings")
+      .select("*")
+      .eq("category", "cta")
+      .order("key", { ascending: true })
+
+    if (error) throw error
+
+    const map: Record<string, string | null> = {}
+    for (const setting of data || []) {
+      map[setting.key] = setting.value
+    }
+    return map
+  },
+  ["cta-settings"],
+  { revalidate: 60, tags: ["settings", "cta"] }
+)
+
+export const getInvestmentSettings = unstable_cache(
+  async () => {
+    const supabase = createPublicClient()
+    const { data, error } = await supabase
+      .from("site_settings")
+      .select("*")
+      .eq("category", "investment")
+      .order("key", { ascending: true })
+
+    if (error) throw error
+
+    const map: Record<string, string | null> = {}
+    for (const setting of data || []) {
+      map[setting.key] = setting.value
+    }
+    return map
+  },
+  ["investment-settings"],
+  { revalidate: 60, tags: ["settings", "investment"] }
+)
+
+export const getPortfolioSettings = unstable_cache(
+  async () => {
+    const supabase = createPublicClient()
+    const { data, error } = await supabase
+      .from("site_settings")
+      .select("*")
+      .eq("category", "portfolio")
+      .order("key", { ascending: true })
+
+    if (error) throw error
+
+    const map: Record<string, string | null> = {}
+    for (const setting of data || []) {
+      map[setting.key] = setting.value
+    }
+    return map
+  },
+  ["portfolio-settings"],
+  { revalidate: 60, tags: ["settings", "portfolio"] }
+)

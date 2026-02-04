@@ -1,11 +1,17 @@
 import { getPortfolioImages, getCategories } from "@/lib/queries/portfolio"
+import { getPortfolioSettings } from "@/lib/queries/settings"
 import { PortfolioGallery } from "./portfolio-gallery"
 
 export default async function PortfolioPage() {
-  const [images, categories] = await Promise.all([
+  const [images, categories, settings] = await Promise.all([
     getPortfolioImages(),
     getCategories(),
+    getPortfolioSettings().catch(() => ({})),
   ])
+
+  const tagline = settings.portfolio_tagline || "Our Work"
+  const title = settings.portfolio_title || "Portfolio"
+  const description = settings.portfolio_description || "A curated collection of our favorite projects across weddings, brand work, and lifestyle photography."
 
   return (
     <>
@@ -19,13 +25,13 @@ export default async function PortfolioPage() {
 
         <div className="container mx-auto px-6 text-center relative">
           <p className="text-sm uppercase tracking-[0.2em] text-primary mb-4">
-            Our Work
+            {tagline}
           </p>
           <h1 className="font-serif text-5xl md:text-6xl text-foreground mb-6">
-            Portfolio
+            {title}
           </h1>
           <p className="max-w-xl mx-auto text-muted-foreground leading-relaxed">
-            A curated collection of our favorite projects across weddings, brand work, and lifestyle photography.
+            {description}
           </p>
         </div>
       </section>

@@ -12,18 +12,22 @@ interface HeroSectionProps {
 export function HeroSection({ settings }: HeroSectionProps) {
   const [isPlaying, setIsPlaying] = useState(false)
 
+  const tagline = settings.hero_tagline || "family + lifestyle photographer"
   const title = settings.hero_title || "Stories Worth Telling"
   const subtitle = settings.hero_subtitle || "Cinematic visuals for weddings, brands, and the moments in between."
   const ctaText = settings.hero_cta_text || "View Our Work"
   const ctaLink = settings.hero_cta_link || "/portfolio"
   const secondaryCtaText = settings.hero_secondary_cta_text || "Watch Showreel"
+  const backgroundImage = settings.hero_background_image || "/images/hero-bg.jpg"
 
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
       {/* Background with overlay */}
       <div className="absolute inset-0 bg-foreground/90">
-        {/* Video placeholder - in production, replace with actual video */}
-        <div className="absolute inset-0 bg-[url('/images/hero-bg.jpg')] bg-cover bg-center opacity-50" />
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-50"
+          style={{ backgroundImage: `url('${backgroundImage}')` }}
+        />
       </div>
       {/* Decorative accent shapes */}
       <div className="absolute top-20 right-10 w-64 h-64 bg-accent/20 rounded-full blur-3xl" />
@@ -32,7 +36,7 @@ export function HeroSection({ settings }: HeroSectionProps) {
       {/* Content */}
       <div className="relative z-10 container mx-auto px-6 text-center text-primary-foreground">
         <p className="text-sm uppercase tracking-[0.3em] mb-6 text-primary-foreground/70">
-          Photo & Video Studio
+          {tagline}
         </p>
         <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-medium mb-6 text-balance leading-tight">
           {title.split(/\s+/).slice(0, 2).join(" ")}
