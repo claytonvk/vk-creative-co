@@ -4,9 +4,11 @@ import { useState, useRef, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
 import { Upload, X, Loader2, Image as ImageIcon, AlertCircle } from "lucide-react"
 import { toast } from "sonner"
 import { uploadSiteImage } from "@/lib/actions/settings"
+import { compressImage, formatFileSize } from "@/lib/image-compression"
 
 interface ImageSettingUploadProps {
   settingKey: string
@@ -15,6 +17,10 @@ interface ImageSettingUploadProps {
   onUpload: (url: string) => void
   description?: string
   aspectRatio?: string
+  /** Show compression toggle (default: true) */
+  showCompressionToggle?: boolean
+  /** Default compression state (default: true) */
+  defaultCompressed?: boolean
 }
 
 export function ImageSettingUpload({
@@ -24,10 +30,14 @@ export function ImageSettingUpload({
   onUpload,
   description,
   aspectRatio = "16/9",
+  showCompressionToggle = true,
+  defaultCompressed = true,
 }: ImageSettingUploadProps) {
   const [isUploading, setIsUploading] = useState(false)
   const [previewUrl, setPreviewUrl] = useState<string | null>(currentUrl)
   const [error, setError] = useState<string | null>(null)
+  const [compressionEnabled, setCompressionEnabled] = useState(defaultCompressed)
+  const [compressionInfo, setCompressionInfo] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Sync previewUrl with currentUrl prop when it changes
@@ -40,6 +50,7 @@ export function ImageSettingUpload({
     if (!file) return
 
     setError(null)
+    setCompressionInfo(null)
 
     // Validate file type
     if (!file.type.startsWith("image/")) {
@@ -49,9 +60,10 @@ export function ImageSettingUpload({
       return
     }
 
-    // Validate file size (max 10MB)
-    if (file.size > 10 * 1024 * 1024) {
-      const msg = "Image must be less than 10MB"
+    // Allow larger files when compression is enabled
+    const maxSize = compressionEnabled ? 50 * 1024 * 1024 : 10 * 1024 * 1024
+    if (file.size > maxSize) {
+      const msg = `Image must be less than ${compressionEnabled ? "50MB" : "10MB"}`
       setError(msg)
       toast.error(msg)
       return
@@ -64,8 +76,24 @@ export function ImageSettingUpload({
     // Upload
     setIsUploading(true)
     try {
+      let fileToUpload = file
+
+      // Compress if enabled
+      if (compressionEnabled) {
+        const result = await compressImage(file, {
+          quality: 0.85,
+          maxWidth: 2400,
+          maxHeight: 2400,
+          format: "webp",
+        })
+        fileToUpload = result.file
+        setCompressionInfo(
+          `Compressed: ${formatFileSize(result.originalSize)} → ${formatFileSize(result.compressedSize)} (${result.compressionRatio}% smaller)`
+        )
+      }
+
       const formData = new FormData()
-      formData.append("file", file)
+      formData.append("file", fileToUpload)
       formData.append("settingKey", settingKey)
 
       console.log("Uploading image for setting:", settingKey)
@@ -76,6 +104,7 @@ export function ImageSettingUpload({
         setError(result.error)
         toast.error(result.error)
         setPreviewUrl(currentUrl)
+        setCompressionInfo(null)
         return
       }
 
@@ -90,6 +119,7 @@ export function ImageSettingUpload({
       setError(msg)
       toast.error(msg)
       setPreviewUrl(currentUrl)
+      setCompressionInfo(null)
     } finally {
       setIsUploading(false)
       URL.revokeObjectURL(localPreview)
@@ -112,6 +142,27 @@ export function ImageSettingUpload({
   return (
     <div className="space-y-3">
       <Label>{label}</Label>
+
+      {showCompressionToggle && !previewUrl && (
+        <div className="flex items-center justify-between rounded-lg border p-3 bg-muted/30">
+          <div className="space-y-0.5">
+            <Label htmlFor={`compression-${settingKey}`} className="text-sm font-medium">
+              Optimize for web
+            </Label>
+            <p className="text-xs text-muted-foreground">
+              {compressionEnabled
+                ? "Converts to WebP, resizes large images"
+                : "Uploads original file without changes"}
+            </p>
+          </div>
+          <Switch
+            id={`compression-${settingKey}`}
+            checked={compressionEnabled}
+            onCheckedChange={setCompressionEnabled}
+            disabled={isUploading}
+          />
+        </div>
+      )}
 
       <div
         className={`relative rounded-lg border-2 border-dashed overflow-hidden transition-colors ${
@@ -186,6 +237,10 @@ export function ImageSettingUpload({
         onChange={handleFileSelect}
         className="hidden"
       />
+
+      {compressionInfo && (
+        <p className="text-xs text-green-600 dark:text-green-400">{compressionInfo}</p>
+      )}
 
       {error && (
         <p className="text-xs text-destructive flex items-center gap-1">

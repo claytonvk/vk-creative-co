@@ -6,6 +6,8 @@ import Link from "next/link"
 import * as tus from "tus-js-client"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { Switch } from "@/components/ui/switch"
+import { Label } from "@/components/ui/label"
 import {
   Card,
   CardContent,
@@ -34,6 +36,7 @@ import {
   setCoverImage,
   createGalleryMediaRecord,
 } from "@/lib/actions/galleries"
+import { compressImage, formatFileSize } from "@/lib/image-compression"
 
 type GalleryWithMedia = ClientGallery & {
   gallery_media: GalleryMedia[]
@@ -50,6 +53,8 @@ export default function GalleryMediaPage() {
   const [uploadProgress, setUploadProgress] = useState(0)
   const [currentFileName, setCurrentFileName] = useState("")
   const [draggedItem, setDraggedItem] = useState<string | null>(null)
+  const [compressionEnabled, setCompressionEnabled] = useState(true)
+  const [compressionStatus, setCompressionStatus] = useState("")
 
   useEffect(() => {
     loadGallery()
@@ -112,16 +117,35 @@ export default function GalleryMediaPage() {
           continue
         }
 
-        // Validate file size (20MB for images, no limit for videos)
-        if (!file.type.startsWith("video/") && file.size > 20 * 1024 * 1024) {
-          toast.error(`Image too large (max 20MB): ${file.name}`)
+        // Validate file size (larger limit when compression enabled for images, no limit for videos)
+        const isImage = file.type.startsWith("image/")
+        const maxImageSize = compressionEnabled ? 50 * 1024 * 1024 : 20 * 1024 * 1024
+        if (isImage && file.size > maxImageSize) {
+          toast.error(`Image too large (max ${compressionEnabled ? "50MB" : "20MB"}): ${file.name}`)
           hasErrors = true
           continue
         }
 
         try {
-          const fileSizeMB = (file.size / (1024 * 1024)).toFixed(1)
-          const fileExt = file.name.split(".").pop()
+          let fileToUpload = file
+          let fileExt = file.name.split(".").pop()
+
+          // Compress images if enabled (videos are never compressed)
+          if (isImage && compressionEnabled) {
+            setCompressionStatus(`Compressing ${file.name}...`)
+            const result = await compressImage(file, {
+              quality: 0.85,
+              maxWidth: 2400,
+              maxHeight: 2400,
+              format: "webp",
+            })
+            fileToUpload = result.file
+            fileExt = "webp"
+            console.log(`Compressed ${file.name}: ${formatFileSize(result.originalSize)} → ${formatFileSize(result.compressedSize)} (${result.compressionRatio}% smaller)`)
+            setCompressionStatus("")
+          }
+
+          const fileSizeMB = (fileToUpload.size / (1024 * 1024)).toFixed(1)
           const fileName = `${galleryId}/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
 
           setCurrentFileName(file.name)
@@ -133,7 +157,7 @@ export default function GalleryMediaPage() {
           const { data: { session } } = await supabase.auth.getSession()
 
           await new Promise<void>((resolve, reject) => {
-            const upload = new tus.Upload(file, {
+            const upload = new tus.Upload(fileToUpload, {
               endpoint: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/upload/resumable`,
               retryDelays: [0, 3000, 5000, 10000, 20000],
               headers: {
@@ -145,7 +169,7 @@ export default function GalleryMediaPage() {
               metadata: {
                 bucketName: "galleries",
                 objectName: fileName,
-                contentType: file.type,
+                contentType: fileToUpload.type,
               },
               chunkSize: 6 * 1024 * 1024, // 6MB chunks
               onError: (error) => {
@@ -182,7 +206,7 @@ export default function GalleryMediaPage() {
             file_url: publicUrl,
             file_type: fileType as "image" | "video",
             filename: file.name,
-            file_size: file.size,
+            file_size: fileToUpload.size,
           })
 
           if (result.error) {
@@ -312,7 +336,26 @@ export default function GalleryMediaPage() {
             Drag and drop or click to upload images and videos.
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between rounded-lg border p-3 bg-muted/30">
+            <div className="space-y-0.5">
+              <Label htmlFor="gallery-compression" className="text-sm font-medium">
+                Optimize images for web
+              </Label>
+              <p className="text-xs text-muted-foreground">
+                {compressionEnabled
+                  ? "Converts images to WebP, resizes large images (max 2400px). Videos upload unchanged."
+                  : "Uploads original files without changes"}
+              </p>
+            </div>
+            <Switch
+              id="gallery-compression"
+              checked={compressionEnabled}
+              onCheckedChange={setCompressionEnabled}
+              disabled={isUploading}
+            />
+          </div>
+
           <label
             className={`flex h-40 w-full cursor-pointer flex-col items-center justify-center rounded-md border-2 border-dashed transition-colors ${
               isUploading
@@ -324,7 +367,7 @@ export default function GalleryMediaPage() {
               <div className="flex flex-col items-center gap-3 w-full px-8">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
                 <span className="text-sm font-medium text-foreground">
-                  Uploading: {currentFileName}
+                  {compressionStatus || `Uploading: ${currentFileName}`}
                 </span>
                 <div className="w-full bg-muted rounded-full h-2">
                   <div
@@ -343,7 +386,7 @@ export default function GalleryMediaPage() {
                   Click to upload or drag and drop
                 </span>
                 <span className="mt-1 text-xs text-muted-foreground">
-                  Images (JPEG, PNG, WebP, GIF) up to 20MB, Videos (MP4, MOV, WebM) no size limit
+                  Images (JPEG, PNG, WebP, GIF) up to {compressionEnabled ? "50MB" : "20MB"}, Videos (MP4, MOV, WebM) no size limit
                 </span>
               </>
             )}

@@ -4,7 +4,10 @@ import { useCallback, useState } from "react"
 import { Upload, X, Loader2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { Switch } from "@/components/ui/switch"
+import { Label } from "@/components/ui/label"
 import { createClient } from "@/lib/supabase/client"
+import { compressImage, formatFileSize } from "@/lib/image-compression"
 
 interface ImageUploadProps {
   value?: string
@@ -12,6 +15,10 @@ interface ImageUploadProps {
   onRemove?: () => void
   disabled?: boolean
   className?: string
+  /** Show compression toggle (default: true) */
+  showCompressionToggle?: boolean
+  /** Default compression state (default: true) */
+  defaultCompressed?: boolean
 }
 
 export function ImageUpload({
@@ -20,9 +27,13 @@ export function ImageUpload({
   onRemove,
   disabled,
   className,
+  showCompressionToggle = true,
+  defaultCompressed = true,
 }: ImageUploadProps) {
   const [isUploading, setIsUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [compressionEnabled, setCompressionEnabled] = useState(defaultCompressed)
+  const [compressionInfo, setCompressionInfo] = useState<string | null>(null)
 
   const handleUpload = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,23 +47,43 @@ export function ImageUpload({
         return
       }
 
-      // Validate file size (10MB)
-      if (file.size > 10 * 1024 * 1024) {
-        setError("Image must be less than 10MB")
+      // Original size limit only applies when compression is off
+      // Allow larger files when compression is enabled
+      const maxSize = compressionEnabled ? 50 * 1024 * 1024 : 10 * 1024 * 1024
+      if (file.size > maxSize) {
+        setError(`Image must be less than ${compressionEnabled ? "50MB" : "10MB"}`)
         return
       }
 
       setIsUploading(true)
       setError(null)
+      setCompressionInfo(null)
 
       try {
+        let fileToUpload = file
+        let fileExt = file.name.split(".").pop()
+
+        // Compress if enabled
+        if (compressionEnabled) {
+          const result = await compressImage(file, {
+            quality: 0.85,
+            maxWidth: 2400,
+            maxHeight: 2400,
+            format: "webp",
+          })
+          fileToUpload = result.file
+          fileExt = "webp"
+          setCompressionInfo(
+            `Compressed: ${formatFileSize(result.originalSize)} → ${formatFileSize(result.compressedSize)} (${result.compressionRatio}% smaller)`
+          )
+        }
+
         const supabase = createClient()
-        const fileExt = file.name.split(".").pop()
         const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
 
         const { data, error: uploadError } = await supabase.storage
           .from("portfolio")
-          .upload(fileName, file)
+          .upload(fileName, fileToUpload)
 
         if (uploadError) {
           throw uploadError
@@ -65,15 +96,37 @@ export function ImageUpload({
         onChange(publicUrl)
       } catch (err) {
         setError(err instanceof Error ? err.message : "Upload failed")
+        setCompressionInfo(null)
       } finally {
         setIsUploading(false)
       }
     },
-    [onChange]
+    [onChange, compressionEnabled]
   )
 
   return (
     <div className={cn("space-y-4", className)}>
+      {showCompressionToggle && !value && (
+        <div className="flex items-center justify-between rounded-lg border p-3 bg-muted/30">
+          <div className="space-y-0.5">
+            <Label htmlFor="compression-toggle" className="text-sm font-medium">
+              Optimize for web
+            </Label>
+            <p className="text-xs text-muted-foreground">
+              {compressionEnabled
+                ? "Converts to WebP, resizes large images (max 2400px)"
+                : "Uploads original file without changes"}
+            </p>
+          </div>
+          <Switch
+            id="compression-toggle"
+            checked={compressionEnabled}
+            onCheckedChange={setCompressionEnabled}
+            disabled={disabled || isUploading}
+          />
+        </div>
+      )}
+
       {value ? (
         <div className="relative inline-block">
           <img
@@ -108,7 +161,7 @@ export function ImageUpload({
             <>
               <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
               <span className="mt-2 text-sm text-muted-foreground">
-                Uploading...
+                {compressionEnabled ? "Compressing & uploading..." : "Uploading..."}
               </span>
             </>
           ) : (
@@ -118,7 +171,7 @@ export function ImageUpload({
                 Click to upload image
               </span>
               <span className="mt-1 text-xs text-muted-foreground">
-                JPEG, PNG, WebP, or GIF (max 10MB)
+                JPEG, PNG, WebP, or GIF (max {compressionEnabled ? "50MB" : "10MB"})
               </span>
             </>
           )}
@@ -130,6 +183,9 @@ export function ImageUpload({
             disabled={disabled || isUploading}
           />
         </label>
+      )}
+      {compressionInfo && (
+        <p className="text-sm text-green-600 dark:text-green-400">{compressionInfo}</p>
       )}
       {error && <p className="text-sm text-destructive">{error}</p>}
     </div>
