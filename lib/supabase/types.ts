@@ -482,6 +482,140 @@ export interface Database {
           created_at?: string
         }
       }
+      portfolio_shoots: {
+        Row: {
+          id: string
+          title: string
+          slug: string
+          description: string | null
+          shoot_date: string | null
+          location: string | null
+          cover_image_url: string | null
+          display_order: number
+          is_featured: boolean
+          is_published: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          title: string
+          slug: string
+          description?: string | null
+          shoot_date?: string | null
+          location?: string | null
+          cover_image_url?: string | null
+          display_order?: number
+          is_featured?: boolean
+          is_published?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          slug?: string
+          description?: string | null
+          shoot_date?: string | null
+          location?: string | null
+          cover_image_url?: string | null
+          display_order?: number
+          is_featured?: boolean
+          is_published?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      shoot_media: {
+        Row: {
+          id: string
+          shoot_id: string
+          file_url: string
+          file_type: string
+          filename: string
+          file_size: number | null
+          width: number | null
+          height: number | null
+          alt_text: string | null
+          display_order: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          shoot_id: string
+          file_url: string
+          file_type?: string
+          filename: string
+          file_size?: number | null
+          width?: number | null
+          height?: number | null
+          alt_text?: string | null
+          display_order?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          shoot_id?: string
+          file_url?: string
+          file_type?: string
+          filename?: string
+          file_size?: number | null
+          width?: number | null
+          height?: number | null
+          alt_text?: string | null
+          display_order?: number
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      shoot_gallery_links: {
+        Row: {
+          id: string
+          shoot_id: string
+          gallery_id: string
+          gallery_media_id: string
+          display_order: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          shoot_id: string
+          gallery_id: string
+          gallery_media_id: string
+          display_order?: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          shoot_id?: string
+          gallery_id?: string
+          gallery_media_id?: string
+          display_order?: number
+          created_at?: string
+        }
+      }
+      shoot_tags: {
+        Row: {
+          id: string
+          shoot_id: string
+          category_id: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          shoot_id: string
+          category_id: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          shoot_id?: string
+          category_id?: string
+          created_at?: string
+        }
+      }
     }
     Functions: {
       is_admin: {
@@ -515,4 +649,30 @@ export type GalleryTheme = 'minimal' | 'romantic' | 'editorial'
 // Gallery with media (joined type)
 export type ClientGalleryWithMedia = ClientGallery & {
   gallery_media: GalleryMedia[]
+}
+
+// Portfolio shoot types
+export type PortfolioShoot = Database["public"]["Tables"]["portfolio_shoots"]["Row"]
+export type ShootMedia = Database["public"]["Tables"]["shoot_media"]["Row"]
+export type ShootGalleryLink = Database["public"]["Tables"]["shoot_gallery_links"]["Row"]
+export type ShootTag = Database["public"]["Tables"]["shoot_tags"]["Row"]
+
+// Shoot with all media (uploaded + linked gallery images)
+export type ShootWithMedia = PortfolioShoot & {
+  shoot_media: ShootMedia[]
+  shoot_gallery_links: (ShootGalleryLink & {
+    gallery_media: GalleryMedia
+  })[]
+  shoot_tags: (ShootTag & {
+    categories: Category
+  })[]
+}
+
+// Shoot card for list views
+export type ShootCard = PortfolioShoot & {
+  shoot_media: { count: number }[]
+  shoot_gallery_links: { count: number }[]
+  shoot_tags: (ShootTag & {
+    categories: { name: string; slug: string }
+  })[]
 }

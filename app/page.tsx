@@ -5,7 +5,7 @@ import { TestimonialsSection } from "@/components/home/testimonials-section"
 import { CTASection } from "@/components/home/cta-section"
 import { getHeroSettings, getCTASettings } from "@/lib/queries/settings"
 import { getValueProps } from "@/lib/queries/value-props"
-import { getFeaturedImages } from "@/lib/queries/portfolio"
+import { getFeaturedShoots } from "@/lib/queries/shoots"
 import { getFeaturedTestimonials } from "@/lib/queries/testimonials"
 
 export default async function HomePage() {
@@ -20,7 +20,7 @@ export default async function HomePage() {
       getHeroSettings().catch(() => ({})),
       getCTASettings().catch(() => ({})),
       getValueProps().catch(() => []),
-      getFeaturedImages(4).catch(() => []),
+      getFeaturedShoots(4).catch(() => []),
       getFeaturedTestimonials(5).catch(() => []),
     ])
     heroSettings = results[0]

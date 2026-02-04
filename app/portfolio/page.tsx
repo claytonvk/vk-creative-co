@@ -1,10 +1,11 @@
-import { getPortfolioImages, getCategories } from "@/lib/queries/portfolio"
+import { getShoots } from "@/lib/queries/shoots"
+import { getCategories } from "@/lib/queries/portfolio"
 import { getPortfolioSettings } from "@/lib/queries/settings"
-import { PortfolioGallery } from "./portfolio-gallery"
+import { ShootsGrid } from "./shoots-grid"
 
 export default async function PortfolioPage() {
-  const [images, categories, settings] = await Promise.all([
-    getPortfolioImages(),
+  const [shoots, categories, settings] = await Promise.all([
+    getShoots(),
     getCategories(),
     getPortfolioSettings().catch(() => ({})),
   ])
@@ -36,7 +37,7 @@ export default async function PortfolioPage() {
         </div>
       </section>
 
-      <PortfolioGallery images={images} categories={categories} />
+      <ShootsGrid shoots={shoots} categories={categories} />
     </>
   )
 }

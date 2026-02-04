@@ -5,20 +5,11 @@ import { useRouter } from "next/navigation"
 import { PageHeader } from "@/components/admin/page-header"
 import { DataTable } from "@/components/admin/data-table"
 import { DeleteDialog } from "@/components/admin/delete-dialog"
-import { ImageUpload } from "@/components/admin/image-upload"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Switch } from "@/components/ui/switch"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import {
   Dialog,
   DialogContent,
@@ -26,37 +17,29 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { toast } from "sonner"
-import { Pencil, Trash2 } from "lucide-react"
-import type { PortfolioImage, Category } from "@/lib/supabase/types"
+import { Pencil, Trash2, Image as ImageIcon, Eye, EyeOff } from "lucide-react"
+import type { Category, ShootCard } from "@/lib/supabase/types"
 import {
-  getPortfolioImages,
-  createPortfolioImage,
-  updatePortfolioImage,
-  deletePortfolioImage,
-} from "@/lib/actions/portfolio"
+  getShoots,
+  createShoot,
+  deleteShoot,
+  publishShoot,
+  unpublishShoot,
+} from "@/lib/actions/shoots"
 import { getCategories } from "@/lib/actions/categories"
 
-type PortfolioWithCategory = PortfolioImage & {
-  categories: { name: string; slug: string } | null
-}
-
 export default function PortfolioPage() {
-  const [images, setImages] = useState<PortfolioWithCategory[]>([])
+  const [shoots, setShoots] = useState<ShootCard[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
-  const [editingImage, setEditingImage] = useState<PortfolioWithCategory | null>(null)
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    image_url: "",
-    category_id: "",
-    display_order: 0,
-    is_featured: false,
-    is_published: true,
-    alt_text: "",
+    shoot_date: "",
+    location: "",
   })
   const router = useRouter()
 
@@ -66,11 +49,11 @@ export default function PortfolioPage() {
 
   async function loadData() {
     try {
-      const [imagesData, categoriesData] = await Promise.all([
-        getPortfolioImages(),
+      const [shootsData, categoriesData] = await Promise.all([
+        getShoots(),
         getCategories(),
       ])
-      setImages(imagesData as PortfolioWithCategory[])
+      setShoots(shootsData as ShootCard[])
       setCategories(categoriesData)
     } catch (error) {
       toast.error("Failed to load data")
@@ -80,31 +63,11 @@ export default function PortfolioPage() {
   }
 
   function openCreateDialog() {
-    setEditingImage(null)
     setFormData({
       title: "",
       description: "",
-      image_url: "",
-      category_id: "",
-      display_order: images.length,
-      is_featured: false,
-      is_published: true,
-      alt_text: "",
-    })
-    setIsDialogOpen(true)
-  }
-
-  function openEditDialog(image: PortfolioWithCategory) {
-    setEditingImage(image)
-    setFormData({
-      title: image.title,
-      description: image.description || "",
-      image_url: image.image_url,
-      category_id: image.category_id || "",
-      display_order: image.display_order,
-      is_featured: image.is_featured,
-      is_published: image.is_published,
-      alt_text: image.alt_text || "",
+      shoot_date: "",
+      location: "",
     })
     setIsDialogOpen(true)
   }
@@ -115,31 +78,24 @@ export default function PortfolioPage() {
     const form = new FormData()
     form.append("title", formData.title)
     form.append("description", formData.description)
-    form.append("image_url", formData.image_url)
-    form.append("category_id", formData.category_id)
-    form.append("display_order", String(formData.display_order))
-    form.append("is_featured", String(formData.is_featured))
-    form.append("is_published", String(formData.is_published))
-    form.append("alt_text", formData.alt_text)
+    form.append("shoot_date", formData.shoot_date)
+    form.append("location", formData.location)
 
     try {
-      if (editingImage) {
-        const result = await updatePortfolioImage(editingImage.id, form)
-        if (result.error) {
-          toast.error(result.error)
-          return
-        }
-        toast.success("Image updated")
-      } else {
-        const result = await createPortfolioImage(form)
-        if (result.error) {
-          toast.error(result.error)
-          return
-        }
-        toast.success("Image created")
+      const result = await createShoot(form)
+      if (result.error) {
+        toast.error(result.error)
+        return
       }
+      toast.success("Shoot created")
       setIsDialogOpen(false)
-      loadData()
+
+      // Navigate to the new shoot's detail page
+      if (result.data) {
+        router.push(`/admin/portfolio/${result.data.id}`)
+      } else {
+        loadData()
+      }
     } catch (error) {
       toast.error("An error occurred")
     }
@@ -149,12 +105,12 @@ export default function PortfolioPage() {
     if (!deletingId) return
 
     try {
-      const result = await deletePortfolioImage(deletingId)
+      const result = await deleteShoot(deletingId)
       if (result.error) {
         toast.error(result.error)
         return
       }
-      toast.success("Image deleted")
+      toast.success("Shoot deleted")
       setIsDeleteDialogOpen(false)
       setDeletingId(null)
       loadData()
@@ -163,29 +119,72 @@ export default function PortfolioPage() {
     }
   }
 
+  async function handleTogglePublish(shoot: ShootCard, e: React.MouseEvent) {
+    e.stopPropagation()
+    try {
+      const result = shoot.is_published
+        ? await unpublishShoot(shoot.id)
+        : await publishShoot(shoot.id)
+      if (result.error) {
+        toast.error(result.error)
+        return
+      }
+      toast.success(shoot.is_published ? "Unpublished" : "Published")
+      loadData()
+    } catch (error) {
+      toast.error("An error occurred")
+    }
+  }
+
+  function getMediaCount(shoot: ShootCard): number {
+    const uploaded = shoot.shoot_media?.[0]?.count ?? 0
+    const linked = shoot.shoot_gallery_links?.[0]?.count ?? 0
+    return uploaded + linked
+  }
+
   const columns = [
     {
-      key: "image",
-      header: "Image",
-      cell: (item: PortfolioWithCategory) => (
-        <img
-          src={item.image_url}
-          alt={item.alt_text || item.title}
-          className="h-12 w-16 rounded object-cover"
-        />
+      key: "cover",
+      header: "Cover",
+      cell: (item: ShootCard) => (
+        item.cover_image_url ? (
+          <img
+            src={item.cover_image_url}
+            alt={item.title}
+            className="h-12 w-16 rounded object-cover"
+          />
+        ) : (
+          <div className="flex h-12 w-16 items-center justify-center rounded bg-muted">
+            <ImageIcon className="h-5 w-5 text-muted-foreground" />
+          </div>
+        )
       ),
     },
     { key: "title", header: "Title" },
     {
-      key: "category",
-      header: "Category",
-      cell: (item: PortfolioWithCategory) =>
-        item.categories?.name || "Uncategorized",
+      key: "tags",
+      header: "Tags",
+      cell: (item: ShootCard) => (
+        <div className="flex flex-wrap gap-1">
+          {item.shoot_tags?.map((tag) => (
+            <Badge key={tag.id} variant="secondary" className="text-xs">
+              {tag.categories?.name}
+            </Badge>
+          ))}
+        </div>
+      ),
+    },
+    {
+      key: "images",
+      header: "Images",
+      cell: (item: ShootCard) => (
+        <span className="text-muted-foreground">{getMediaCount(item)}</span>
+      ),
     },
     {
       key: "status",
       header: "Status",
-      cell: (item: PortfolioWithCategory) => (
+      cell: (item: ShootCard) => (
         <div className="flex gap-1">
           {item.is_featured && <Badge variant="secondary">Featured</Badge>}
           <Badge variant={item.is_published ? "default" : "outline"}>
@@ -197,14 +196,29 @@ export default function PortfolioPage() {
     {
       key: "actions",
       header: "",
-      cell: (item: PortfolioWithCategory) => (
+      cell: (item: ShootCard) => (
         <div className="flex gap-2">
           <Button
             variant="ghost"
             size="icon"
             onClick={(e) => {
               e.stopPropagation()
-              openEditDialog(item)
+              handleTogglePublish(item, e)
+            }}
+            title={item.is_published ? "Unpublish" : "Publish"}
+          >
+            {item.is_published ? (
+              <EyeOff className="h-4 w-4" />
+            ) : (
+              <Eye className="h-4 w-4" />
+            )}
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={(e) => {
+              e.stopPropagation()
+              router.push(`/admin/portfolio/${item.id}`)
             }}
           >
             <Pencil className="h-4 w-4" />
@@ -232,60 +246,34 @@ export default function PortfolioPage() {
   return (
     <div className="space-y-8">
       <PageHeader
-        title="Portfolio"
-        description="Manage your portfolio images"
-        action={{ label: "Add Image", onClick: openCreateDialog }}
+        title="Portfolio Shoots"
+        description="Manage your portfolio shoots and sessions"
+        action={{ label: "New Shoot", onClick: openCreateDialog }}
       />
 
-      <DataTable columns={columns} data={images} />
+      <DataTable
+        columns={columns}
+        data={shoots}
+        onRowClick={(item) => router.push(`/admin/portfolio/${item.id}`)}
+      />
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle>
-              {editingImage ? "Edit Image" : "Add Image"}
-            </DialogTitle>
+            <DialogTitle>Create New Shoot</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <ImageUpload
-              value={formData.image_url}
-              onChange={(url) => setFormData({ ...formData, image_url: url })}
-              onRemove={() => setFormData({ ...formData, image_url: "" })}
-            />
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="title">Title</Label>
-                <Input
-                  id="title"
-                  value={formData.title}
-                  onChange={(e) =>
-                    setFormData({ ...formData, title: e.target.value })
-                  }
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="category">Category</Label>
-                <Select
-                  value={formData.category_id}
-                  onValueChange={(value) =>
-                    setFormData({ ...formData, category_id: value })
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {categories.map((cat) => (
-                      <SelectItem key={cat.id} value={cat.id}>
-                        {cat.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="title">Title</Label>
+              <Input
+                id="title"
+                value={formData.title}
+                onChange={(e) =>
+                  setFormData({ ...formData, title: e.target.value })
+                }
+                placeholder="e.g. Clay + Ali"
+                required
+              />
             </div>
 
             <div className="space-y-2">
@@ -296,59 +284,33 @@ export default function PortfolioPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
                 }
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="alt_text">Alt Text</Label>
-              <Input
-                id="alt_text"
-                value={formData.alt_text}
-                onChange={(e) =>
-                  setFormData({ ...formData, alt_text: e.target.value })
-                }
-                placeholder="Describe the image for accessibility"
+                placeholder="Brief description of the shoot"
               />
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="display_order">Display Order</Label>
+                <Label htmlFor="shoot_date">Shoot Date</Label>
                 <Input
-                  id="display_order"
-                  type="number"
-                  value={formData.display_order}
+                  id="shoot_date"
+                  type="date"
+                  value={formData.shoot_date}
                   onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      display_order: parseInt(e.target.value) || 0,
-                    })
+                    setFormData({ ...formData, shoot_date: e.target.value })
                   }
                 />
               </div>
-            </div>
 
-            <div className="flex gap-6">
-              <div className="flex items-center gap-2">
-                <Switch
-                  id="is_featured"
-                  checked={formData.is_featured}
-                  onCheckedChange={(checked) =>
-                    setFormData({ ...formData, is_featured: checked })
+              <div className="space-y-2">
+                <Label htmlFor="location">Location</Label>
+                <Input
+                  id="location"
+                  value={formData.location}
+                  onChange={(e) =>
+                    setFormData({ ...formData, location: e.target.value })
                   }
+                  placeholder="e.g. Austin, TX"
                 />
-                <Label htmlFor="is_featured">Featured</Label>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <Switch
-                  id="is_published"
-                  checked={formData.is_published}
-                  onCheckedChange={(checked) =>
-                    setFormData({ ...formData, is_published: checked })
-                  }
-                />
-                <Label htmlFor="is_published">Published</Label>
               </div>
             </div>
 
@@ -360,9 +322,7 @@ export default function PortfolioPage() {
               >
                 Cancel
               </Button>
-              <Button type="submit">
-                {editingImage ? "Update" : "Create"}
-              </Button>
+              <Button type="submit">Create Shoot</Button>
             </div>
           </form>
         </DialogContent>
@@ -372,8 +332,8 @@ export default function PortfolioPage() {
         open={isDeleteDialogOpen}
         onOpenChange={setIsDeleteDialogOpen}
         onConfirm={handleDelete}
-        title="Delete Image"
-        description="Are you sure you want to delete this image? This action cannot be undone."
+        title="Delete Shoot"
+        description="Are you sure you want to delete this shoot? All uploaded images will be removed. This action cannot be undone."
       />
     </div>
   )

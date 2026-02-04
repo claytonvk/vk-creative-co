@@ -2,19 +2,35 @@ import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
-import type { PortfolioImage } from "@/lib/supabase/types"
+
+type FeaturedShoot = {
+  id: string
+  title: string
+  slug: string
+  cover_image_url: string | null
+  shoot_tags: {
+    id: string
+    categories: { name: string; slug: string } | null
+  }[]
+}
 
 interface FeaturedWorkSectionProps {
-  images: (PortfolioImage & { categories: { name: string; slug: string } | null })[]
+  images: FeaturedShoot[]
 }
 
 export function FeaturedWorkSection({ images }: FeaturedWorkSectionProps) {
-  // Fallback data if no images from database
-  const featuredWorks = images.length > 0 ? images : [
-    { id: "1", title: "Sarah & James", categories: { name: "Wedding", slug: "weddings" }, image_url: "/images/work-1.jpg" },
-    { id: "2", title: "Bloom Cafe", categories: { name: "Brand", slug: "brand" }, image_url: "/images/work-2.jpg" },
-    { id: "3", title: "Golden Hour", categories: { name: "Lifestyle", slug: "lifestyle" }, image_url: "/images/work-3.jpg" },
-    { id: "4", title: "Emma & Noah", categories: { name: "Wedding", slug: "weddings" }, image_url: "/images/work-4.jpg" },
+  // Fallback data if no shoots from database
+  const featuredWorks = images.length > 0 ? images.map((shoot) => ({
+    id: shoot.id,
+    title: shoot.title,
+    slug: shoot.slug,
+    image_url: shoot.cover_image_url || "/placeholder.svg",
+    categoryName: shoot.shoot_tags?.[0]?.categories?.name || "Portfolio",
+  })) : [
+    { id: "1", title: "Sarah & James", slug: "sarah-james", categoryName: "Wedding", image_url: "/images/work-1.jpg" },
+    { id: "2", title: "Bloom Cafe", slug: "bloom-cafe", categoryName: "Brand", image_url: "/images/work-2.jpg" },
+    { id: "3", title: "Golden Hour", slug: "golden-hour", categoryName: "Lifestyle", image_url: "/images/work-3.jpg" },
+    { id: "4", title: "Emma & Noah", slug: "emma-noah", categoryName: "Wedding", image_url: "/images/work-4.jpg" },
   ]
 
   return (
@@ -52,7 +68,7 @@ export function FeaturedWorkSection({ images }: FeaturedWorkSectionProps) {
             return (
               <Link
                 key={work.id}
-                href="/portfolio"
+                href={`/portfolio/${work.slug}`}
                 className={`group relative overflow-hidden bg-muted rounded-2xl ${layouts[index]} ${rotations[index]} hover:rotate-0 transition-transform duration-500`}
               >
                 <Image
@@ -64,7 +80,7 @@ export function FeaturedWorkSection({ images }: FeaturedWorkSectionProps) {
                 <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
                   <span className="inline-block px-3 py-1 text-xs uppercase tracking-[0.2em] bg-accent/90 text-accent-foreground rounded-full mb-2">
-                    {work.categories?.name || "Uncategorized"}
+                    {work.categoryName}
                   </span>
                   <h3 className="font-serif text-2xl text-primary-foreground">{work.title}</h3>
                 </div>
