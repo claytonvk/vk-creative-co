@@ -1,10 +1,9 @@
-import { cn } from "@/lib/utils"
-
 interface EditorialThemeProps {
   children: React.ReactNode
+  themeColor?: string
 }
 
-export function EditorialTheme({ children }: EditorialThemeProps) {
+export function EditorialTheme({ children, themeColor = "#ffffff" }: EditorialThemeProps) {
   return (
     <div className="editorial-theme min-h-screen bg-gray-950 text-white">
       <style jsx global>{`
@@ -12,9 +11,10 @@ export function EditorialTheme({ children }: EditorialThemeProps) {
 
         .editorial-theme {
           font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+          --theme-color: ${themeColor};
         }
         .editorial-theme .gallery-header {
-          border-bottom: 1px solid #333;
+          border-bottom: 1px solid ${themeColor}30;
         }
         .editorial-theme .gallery-title {
           font-family: "Bebas Neue", sans-serif;
@@ -30,7 +30,8 @@ export function EditorialTheme({ children }: EditorialThemeProps) {
           }
         }
         .editorial-theme .gallery-date {
-          color: #888;
+          color: ${themeColor};
+          opacity: 0.7;
           font-weight: 300;
         }
         .editorial-theme .gallery-description {
@@ -38,13 +39,13 @@ export function EditorialTheme({ children }: EditorialThemeProps) {
           font-weight: 300;
         }
         .editorial-theme .gallery-button {
-          border-color: #555;
+          border-color: ${themeColor}50;
           color: #fff;
           background: transparent;
         }
         .editorial-theme .gallery-button:hover {
-          background: #222;
-          border-color: #888;
+          background: ${themeColor}20;
+          border-color: ${themeColor};
         }
         .editorial-theme .gallery-grid img,
         .editorial-theme .gallery-grid video {

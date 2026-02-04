@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import type { ClientGalleryWithMedia } from "@/lib/supabase/types"
+import { GalleryHero } from "./gallery-hero"
 import { GalleryHeader } from "./gallery-header"
 import { GalleryGrid } from "./gallery-grid"
 import { GalleryLightbox } from "./gallery-lightbox"
@@ -18,6 +19,8 @@ export function GalleryView({ gallery }: GalleryViewProps) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [isSelectionMode, setIsSelectionMode] = useState(false)
+
+  const themeColor = gallery.theme_color || "#1a1a1a"
 
   const ThemeWrapper = {
     minimal: MinimalTheme,
@@ -82,7 +85,14 @@ export function GalleryView({ gallery }: GalleryViewProps) {
   }
 
   return (
-    <ThemeWrapper>
+    <ThemeWrapper themeColor={themeColor}>
+      {gallery.cover_image_url && (
+        <GalleryHero
+          coverUrl={gallery.cover_image_url}
+          name={gallery.name}
+          themeColor={themeColor}
+        />
+      )}
       <GalleryHeader
         gallery={gallery}
         isSelectionMode={isSelectionMode}
@@ -93,6 +103,8 @@ export function GalleryView({ gallery }: GalleryViewProps) {
             setIsSelectionMode(true)
           }
         }}
+        hasCoverHero={!!gallery.cover_image_url}
+        themeColor={themeColor}
       />
       <GalleryGrid
         media={gallery.gallery_media || []}
@@ -102,6 +114,7 @@ export function GalleryView({ gallery }: GalleryViewProps) {
         isSelectionMode={isSelectionMode}
         selectedIds={selectedIds}
         onToggleSelection={toggleSelection}
+        themeColor={themeColor}
       />
       {lightboxIndex !== null && gallery.gallery_media && (
         <GalleryLightbox
@@ -123,6 +136,7 @@ export function GalleryView({ gallery }: GalleryViewProps) {
           galleryName={gallery.name}
           onSelectAll={selectAll}
           onClearSelection={clearSelection}
+          themeColor={themeColor}
         />
       )}
     </ThemeWrapper>

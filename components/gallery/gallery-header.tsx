@@ -9,12 +9,16 @@ interface GalleryHeaderProps {
   gallery: ClientGalleryWithMedia
   isSelectionMode?: boolean
   onToggleSelectionMode?: () => void
+  hasCoverHero?: boolean
+  themeColor?: string
 }
 
 export function GalleryHeader({
   gallery,
   isSelectionMode = false,
   onToggleSelectionMode,
+  hasCoverHero = false,
+  themeColor = "#1a1a1a",
 }: GalleryHeaderProps) {
   const [isDownloading, setIsDownloading] = useState(false)
 
@@ -54,24 +58,27 @@ export function GalleryHeader({
 
   return (
     <header className="gallery-header">
-      <div className="container mx-auto px-4 py-12 text-center md:py-16">
-        <h1 className="gallery-title text-3xl font-light tracking-wide md:text-4xl lg:text-5xl">
-          {gallery.name}
-        </h1>
+      <div className={`container mx-auto px-4 text-center ${hasCoverHero ? "py-8" : "py-12 md:py-16"}`}>
+        {/* Only show title if no hero */}
+        {!hasCoverHero && (
+          <h1 className="gallery-title text-3xl font-light tracking-wide md:text-4xl lg:text-5xl">
+            {gallery.name}
+          </h1>
+        )}
 
         {formattedDate && (
-          <p className="gallery-date mt-3 text-sm tracking-widest uppercase opacity-70">
+          <p className={`gallery-date text-sm tracking-widest uppercase opacity-70 ${hasCoverHero ? "" : "mt-3"}`}>
             {formattedDate}
           </p>
         )}
 
         {gallery.description && (
-          <p className="gallery-description mx-auto mt-6 max-w-2xl text-base opacity-80">
+          <p className="gallery-description mx-auto mt-4 max-w-2xl text-base opacity-80">
             {gallery.description}
           </p>
         )}
 
-        <div className="mt-8 flex items-center justify-center gap-3 flex-wrap">
+        <div className="mt-6 flex items-center justify-center gap-3 flex-wrap">
           <p className="text-sm opacity-60">
             {gallery.gallery_media?.length || 0} photos
           </p>
@@ -81,6 +88,10 @@ export function GalleryHeader({
               onClick={onToggleSelectionMode}
               variant="outline"
               className="gallery-button"
+              style={{
+                borderColor: isSelectionMode ? themeColor : undefined,
+                color: isSelectionMode ? themeColor : undefined,
+              }}
             >
               {isSelectionMode ? (
                 <>

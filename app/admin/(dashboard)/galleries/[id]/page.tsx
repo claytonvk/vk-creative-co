@@ -65,6 +65,7 @@ export default function GalleryEditPage() {
     event_date: "",
     description: "",
     theme: "minimal" as GalleryTheme,
+    theme_color: "#1a1a1a",
     access_mode: "guest_link" as "guest_link" | "client_account",
     expires_at: "",
     allow_downloads: true,
@@ -87,6 +88,7 @@ export default function GalleryEditPage() {
         event_date: data.event_date || "",
         description: data.description || "",
         theme: data.theme,
+        theme_color: data.theme_color || "#1a1a1a",
         access_mode: data.access_mode,
         expires_at: data.expires_at ? data.expires_at.split("T")[0] : "",
         allow_downloads: data.allow_downloads,
@@ -112,6 +114,7 @@ export default function GalleryEditPage() {
     form.append("event_date", formData.event_date)
     form.append("description", formData.description)
     form.append("theme", formData.theme)
+    form.append("theme_color", formData.theme_color)
     form.append("access_mode", formData.access_mode)
     form.append("expires_at", formData.expires_at)
     form.append("allow_downloads", String(formData.allow_downloads))
@@ -359,11 +362,56 @@ export default function GalleryEditPage() {
                   Choose how your gallery will look to clients.
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-6">
                 <GalleryThemePicker
                   value={formData.theme}
                   onChange={(theme) => setFormData({ ...formData, theme })}
                 />
+
+                <div className="space-y-3">
+                  <Label>Accent Color</Label>
+                  <div className="flex items-center gap-4">
+                    <div
+                      className="h-10 w-10 rounded-lg border shadow-sm cursor-pointer overflow-hidden"
+                      style={{ backgroundColor: formData.theme_color }}
+                    >
+                      <input
+                        type="color"
+                        value={formData.theme_color}
+                        onChange={(e) =>
+                          setFormData({ ...formData, theme_color: e.target.value })
+                        }
+                        className="h-full w-full cursor-pointer opacity-0"
+                      />
+                    </div>
+                    <Input
+                      value={formData.theme_color}
+                      onChange={(e) =>
+                        setFormData({ ...formData, theme_color: e.target.value })
+                      }
+                      placeholder="#1a1a1a"
+                      className="w-28 font-mono text-sm"
+                    />
+                    <div className="flex gap-2">
+                      {["#1a1a1a", "#78350f", "#0f766e", "#6d28d9", "#be123c"].map((color) => (
+                        <button
+                          key={color}
+                          type="button"
+                          onClick={() => setFormData({ ...formData, theme_color: color })}
+                          className={`h-8 w-8 rounded-full border-2 transition-all ${
+                            formData.theme_color === color
+                              ? "border-foreground scale-110"
+                              : "border-transparent hover:scale-105"
+                          }`}
+                          style={{ backgroundColor: color }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    This color will be used for accents, buttons, and highlights in your gallery.
+                  </p>
+                </div>
               </CardContent>
             </Card>
 

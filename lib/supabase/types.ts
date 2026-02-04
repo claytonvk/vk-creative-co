@@ -305,6 +305,7 @@ export interface Database {
           event_date: string | null
           description: string | null
           theme: 'minimal' | 'romantic' | 'editorial'
+          theme_color: string | null
           access_mode: 'guest_link' | 'client_account'
           access_token: string
           expires_at: string | null
@@ -326,6 +327,7 @@ export interface Database {
           event_date?: string | null
           description?: string | null
           theme?: 'minimal' | 'romantic' | 'editorial'
+          theme_color?: string | null
           access_mode?: 'guest_link' | 'client_account'
           access_token: string
           expires_at?: string | null
@@ -347,6 +349,7 @@ export interface Database {
           event_date?: string | null
           description?: string | null
           theme?: 'minimal' | 'romantic' | 'editorial'
+          theme_color?: string | null
           access_mode?: 'guest_link' | 'client_account'
           access_token?: string
           expires_at?: string | null

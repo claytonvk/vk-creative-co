@@ -12,6 +12,7 @@ interface GallerySelectionBarProps {
   galleryName: string
   onSelectAll: () => void
   onClearSelection: () => void
+  themeColor?: string
 }
 
 export function GallerySelectionBar({
@@ -22,6 +23,7 @@ export function GallerySelectionBar({
   galleryName,
   onSelectAll,
   onClearSelection,
+  themeColor = "#1a1a1a",
 }: GallerySelectionBarProps) {
   const [isDownloading, setIsDownloading] = useState(false)
 
@@ -94,6 +96,8 @@ export function GallerySelectionBar({
             size="sm"
             onClick={handleDownloadSelected}
             disabled={isDownloading || selectedCount === 0}
+            style={{ backgroundColor: themeColor }}
+            className="text-white hover:opacity-90"
           >
             {isDownloading ? (
               <>

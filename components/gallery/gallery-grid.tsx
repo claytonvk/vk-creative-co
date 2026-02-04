@@ -12,6 +12,7 @@ interface GalleryGridProps {
   isSelectionMode?: boolean
   selectedIds?: Set<string>
   onToggleSelection?: (id: string) => void
+  themeColor?: string
 }
 
 export function GalleryGrid({
@@ -22,6 +23,7 @@ export function GalleryGrid({
   isSelectionMode = false,
   selectedIds = new Set(),
   onToggleSelection,
+  themeColor = "#1a1a1a",
 }: GalleryGridProps) {
   const handleDownload = async (e: React.MouseEvent, item: GalleryMedia) => {
     e.stopPropagation()
@@ -68,8 +70,9 @@ export function GalleryGrid({
             <div
               key={item.id}
               className={`group relative mb-4 cursor-pointer break-inside-avoid overflow-hidden rounded-lg transition-all ${
-                isSelected ? "ring-2 ring-primary ring-offset-2" : ""
+                isSelected ? "ring-2 ring-offset-2" : ""
               }`}
+              style={isSelected ? { "--tw-ring-color": themeColor } as React.CSSProperties : undefined}
               onClick={(e) => handleClick(e, index, item.id)}
             >
               {item.file_type === "video" ? (
@@ -106,9 +109,10 @@ export function GalleryGrid({
                   type="button"
                   className={`absolute left-3 top-3 flex h-6 w-6 items-center justify-center rounded-full border-2 transition-all ${
                     isSelected
-                      ? "border-primary bg-primary text-primary-foreground"
+                      ? "text-white"
                       : "border-white bg-black/30 text-white opacity-0 group-hover:opacity-100"
                   } ${isSelectionMode ? "opacity-100" : ""}`}
+                  style={isSelected ? { borderColor: themeColor, backgroundColor: themeColor } : undefined}
                   onClick={(e) => handleCheckboxClick(e, item.id)}
                 >
                   {isSelected && <Check className="h-4 w-4" />}
@@ -117,7 +121,10 @@ export function GalleryGrid({
 
               {/* Selected indicator overlay */}
               {isSelected && (
-                <div className="absolute inset-0 bg-primary/10 pointer-events-none" />
+                <div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{ backgroundColor: `${themeColor}15` }}
+                />
               )}
 
               {/* Overlay with download button */}

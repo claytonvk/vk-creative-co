@@ -132,6 +132,7 @@ export async function updateGallery(id: string, formData: FormData) {
   const event_date = formData.get("event_date") as string | null
   const description = formData.get("description") as string | null
   const theme = (formData.get("theme") as ClientGallery["theme"]) || "minimal"
+  const theme_color = formData.get("theme_color") as string | null
   const access_mode = (formData.get("access_mode") as ClientGallery["access_mode"]) || "guest_link"
   const expires_at = formData.get("expires_at") as string | null
   const allow_downloads = formData.get("allow_downloads") === "true"
@@ -161,6 +162,7 @@ export async function updateGallery(id: string, formData: FormData) {
       event_date: event_date || null,
       description: description || null,
       theme,
+      theme_color: theme_color || "#1a1a1a",
       access_mode,
       expires_at: expires_at || null,
       allow_downloads,
