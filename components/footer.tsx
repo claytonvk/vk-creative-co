@@ -20,7 +20,7 @@ export async function Footer() {
   const instagramHandle = instagramUrl.split("/").pop() || "vkcreative"
 
   return (
-    <footer className="bg-gradient-to-br from-foreground via-foreground to-primary/40 text-primary-foreground">
+    <footer className="text-primary">
       <div className="container mx-auto px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* Brand */}
@@ -34,7 +34,7 @@ export async function Footer() {
                 className="h-12 w-auto brightness-110"
               />
             </Link>
-            <p className="mt-4 text-primary-foreground/70 max-w-md leading-relaxed">
+            <p className="mt-4 text-primary max-w-md leading-relaxed">
               {tagline}
             </p>
           </div>
@@ -44,22 +44,22 @@ export async function Footer() {
             <h4 className="font-serif text-lg mb-4">Navigate</h4>
             <ul className="space-y-3">
               <li>
-                <Link href="/portfolio" className="text-primary-foreground/70 hover:text-primary-foreground transition-colors">
+                <Link href="/portfolio" className="text-primary hover:text-primary/70 transition-colors">
                   Portfolio
                 </Link>
               </li>
               <li>
-                <Link href="/investment" className="text-primary-foreground/70 hover:text-primary-foreground transition-colors">
+                <Link href="/investment" className="text-primary hover:text-primary/70 transition-colors">
                   Investment
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="text-primary-foreground/70 hover:text-primary-foreground transition-colors">
+                <Link href="/about" className="text-primary hover:text-primary/70 transition-colors">
                   About
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-primary-foreground/70 hover:text-primary-foreground transition-colors">
+                <Link href="/contact" className="text-primary hover:text-primary/70 transition-colors">
                   Contact
                 </Link>
               </li>
@@ -76,7 +76,7 @@ export async function Footer() {
                     href={instagramUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-primary-foreground/70 hover:text-primary-foreground transition-colors"
+                    className="flex items-center gap-2 text-primary hover:text-primary/70 transition-colors"
                   >
                     <Instagram className="h-4 w-4" />
                     @{instagramHandle}
@@ -89,7 +89,7 @@ export async function Footer() {
                     href={facebookUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-primary-foreground/70 hover:text-primary-foreground transition-colors"
+                    className="flex items-center gap-2 text-primary hover:text-primary/70 transition-colors"
                   >
                     <Facebook className="h-4 w-4" />
                     Facebook
@@ -99,14 +99,14 @@ export async function Footer() {
               <li>
                 <a
                   href={`mailto:${email}`}
-                  className="flex items-center gap-2 text-primary-foreground/70 hover:text-primary-foreground transition-colors"
+                  className="flex items-center gap-2 text-primary hover:text-primary/70 transition-colors"
                 >
                   <Mail className="h-4 w-4" />
                   {email}
                 </a>
               </li>
               <li>
-                <span className="flex items-center gap-2 text-primary-foreground/70">
+                <span className="flex items-center gap-2 text-primary">
                   <MapPin className="h-4 w-4" />
                   {location}
                 </span>
@@ -117,14 +117,14 @@ export async function Footer() {
 
         {/* Bottom Bar */}
         <div className="mt-16 pt-8 border-t border-primary-foreground/20 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-primary-foreground/50">
+          <p className="text-sm text-primary/50">
             {copyright}
           </p>
           <div className="flex gap-6">
-            <Link href="/privacy" className="text-sm text-primary-foreground/50 hover:text-primary-foreground transition-colors">
+            <Link href="/privacy" className="text-sm text-primary/50 hover:text-primary/70 transition-colors">
               Privacy Policy
             </Link>
-            <Link href="/terms" className="text-sm text-primary-foreground/50 hover:text-primary-foreground transition-colors">
+            <Link href="/terms" className="text-sm text-primary/50 hover:text-primary/70 transition-colors">
               Terms of Service
             </Link>
           </div>

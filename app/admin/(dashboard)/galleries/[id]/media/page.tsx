@@ -337,7 +337,7 @@ export default function GalleryMediaPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-center justify-between rounded-lg border p-3 bg-muted/30">
+          <div className="flex items-center justify-between border p-3 bg-muted/30">
             <div className="space-y-0.5">
               <Label htmlFor="gallery-compression" className="text-sm font-medium">
                 Optimize images for web
@@ -357,7 +357,7 @@ export default function GalleryMediaPage() {
           </div>
 
           <label
-            className={`flex h-40 w-full cursor-pointer flex-col items-center justify-center rounded-md border-2 border-dashed transition-colors ${
+            className={`flex h-40 w-full cursor-pointer flex-col items-center justify-center border-2 border-dashed transition-colors ${
               isUploading
                 ? "cursor-not-allowed opacity-50"
                 : "hover:border-primary hover:bg-muted/50"
@@ -369,9 +369,9 @@ export default function GalleryMediaPage() {
                 <span className="text-sm font-medium text-foreground">
                   {compressionStatus || `Uploading: ${currentFileName}`}
                 </span>
-                <div className="w-full bg-muted rounded-full h-2">
+                <div className="w-full bg-muted  h-2">
                   <div
-                    className="bg-primary h-2 rounded-full transition-all duration-300"
+                    className="bg-primary h-2  transition-all duration-300"
                     style={{ width: `${uploadProgress}%` }}
                   />
                 </div>
@@ -415,7 +415,7 @@ export default function GalleryMediaPage() {
               {gallery.gallery_media.map((media) => (
                 <div
                   key={media.id}
-                  className={`group relative aspect-square overflow-hidden rounded-lg border bg-muted ${
+                  className={`group relative aspect-square overflow-hidden border bg-muted ${
                     draggedItem === media.id ? "opacity-50" : ""
                   }`}
                   draggable

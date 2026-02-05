@@ -47,9 +47,9 @@ export function ShootDetail({
   return (
     <>
       {/* Hero */}
-      <section className="py-24 md:py-32 bg-card relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-secondary/40 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+      <section className="pt-24 md:pt-32  relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-secondary/40  blur-3xl -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent/20  blur-3xl translate-y-1/2 -translate-x-1/2" />
 
         <div className="container mx-auto px-6 relative">
           <Link
@@ -66,7 +66,7 @@ export function ShootDetail({
                 {tags.map((tag) => (
                   <span
                     key={tag}
-                    className="inline-block px-3 py-1 text-xs uppercase tracking-[0.2em] bg-secondary text-secondary-foreground rounded-full"
+                    className="inline-block px-3 py-1 text-xs uppercase tracking-[0.2em] bg-secondary text-secondary-foreground "
                   >
                     {tag}
                   </span>
@@ -118,7 +118,7 @@ export function ShootDetail({
                   key={index}
                   type="button"
                   onClick={() => openLightbox(index)}
-                  className="group relative aspect-[4/5] overflow-hidden bg-muted cursor-pointer rounded-lg"
+                  className="group relative aspect-[4/5] overflow-hidden bg-muted cursor-pointer "
                 >
                   <Image
                     src={image.url}

@@ -234,7 +234,7 @@ export default function ShootDetailPage() {
                     key={cat.id}
                     type="button"
                     onClick={() => toggleTag(cat.id)}
-                    className={`inline-flex items-center rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
+                    className={`inline-flex items-center  px-3 py-1.5 text-sm font-medium transition-colors ${
                       selectedTags.includes(cat.id)
                         ? "bg-primary text-primary-foreground"
                         : "bg-secondary text-secondary-foreground hover:bg-accent"
@@ -297,10 +297,10 @@ export default function ShootDetailPage() {
                 <img
                   src={shoot.cover_image_url}
                   alt={shoot.title}
-                  className="w-full rounded-lg object-cover aspect-[4/3]"
+                  className="w-full object-cover aspect-[4/3]"
                 />
               ) : (
-                <div className="flex aspect-[4/3] w-full items-center justify-center rounded-lg bg-muted">
+                <div className="flex aspect-[4/3] w-full items-center justify-center bg-muted">
                   <ImageIcon className="h-8 w-8 text-muted-foreground" />
                 </div>
               )}

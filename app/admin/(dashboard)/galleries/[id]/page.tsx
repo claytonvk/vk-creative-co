@@ -376,7 +376,7 @@ export default function GalleryEditPage() {
                   <Label>Accent Color</Label>
                   <div className="flex items-center gap-4">
                     <div
-                      className="h-10 w-10 rounded-lg border shadow-sm cursor-pointer overflow-hidden"
+                      className="h-10 w-10 border shadow-sm cursor-pointer overflow-hidden"
                       style={{ backgroundColor: formData.theme_color }}
                     >
                       <input
@@ -402,7 +402,7 @@ export default function GalleryEditPage() {
                           key={color}
                           type="button"
                           onClick={() => setFormData({ ...formData, theme_color: color })}
-                          className={`h-8 w-8 rounded-full border-2 transition-all ${
+                          className={`h-8 w-8  border-2 transition-all ${
                             formData.theme_color === color
                               ? "border-foreground scale-110"
                               : "border-transparent hover:scale-105"

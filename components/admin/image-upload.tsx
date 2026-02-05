@@ -107,7 +107,7 @@ export function ImageUpload({
   return (
     <div className={cn("space-y-4", className)}>
       {showCompressionToggle && !value && (
-        <div className="flex items-center justify-between rounded-lg border p-3 bg-muted/30">
+        <div className="flex items-center justify-between border p-3 bg-muted/30">
           <div className="space-y-0.5">
             <Label htmlFor="compression-toggle" className="text-sm font-medium">
               Optimize for web
@@ -132,7 +132,7 @@ export function ImageUpload({
           <img
             src={value}
             alt="Uploaded image"
-            className="h-40 w-auto rounded-md object-cover"
+            className="h-40 w-auto  object-cover"
           />
           {onRemove && (
             <Button
@@ -150,7 +150,7 @@ export function ImageUpload({
       ) : (
         <label
           className={cn(
-            "flex h-40 w-full cursor-pointer flex-col items-center justify-center rounded-md border-2 border-dashed transition-colors",
+            "flex h-40 w-full cursor-pointer flex-col items-center justify-center  border-2 border-dashed transition-colors",
             disabled
               ? "cursor-not-allowed opacity-50"
               : "hover:border-primary hover:bg-muted/50",

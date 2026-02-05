@@ -29,10 +29,7 @@ export default async function InvestmentPage() {
   return (
     <>
       {/* Hero */}
-      <section className="py-24 md:py-32 bg-card relative overflow-hidden">
-        {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-secondary/50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+      <section className="pt-24 md:pt-32  relative overflow-hidden">
 
         <div className="container mx-auto px-6 text-center relative">
           <p className="text-sm uppercase tracking-[0.2em] text-primary mb-4">
@@ -61,14 +58,14 @@ export default async function InvestmentPage() {
                 return (
                   <div
                     key={pkg.id}
-                    className={`relative flex flex-col justify-between p-8 rounded-2xl border-2 transition-all duration-300 hover:scale-[1.02] hover:-rotate-1 ${
+                    className={`relative flex flex-col justify-between p-8  border-2 transition-all duration-300 hover:scale-[1.02] hover:-rotate-1 ${
                       pkg.is_featured
                         ? "border-primary bg-gradient-to-br from-secondary via-secondary/80 to-accent/20"
                         : "border-border/50 bg-card hover:border-primary/30"
                     }`}
                   >
                     {pkg.badge_text && (
-                      <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs uppercase tracking-wider px-4 py-1 rounded-full">
+                      <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs uppercase tracking-wider px-4 py-1 ">
                         {pkg.badge_text}
                       </span>
                     )}
@@ -146,10 +143,10 @@ export default async function InvestmentPage() {
       )}
 
       {/* CTA */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-foreground via-foreground to-primary/40 text-primary-foreground relative overflow-hidden">
+      <section className="py-16 md:py-24 bg-foreground text-primary-foreground relative overflow-hidden">
         {/* Decorative shapes */}
-        <div className="absolute top-0 right-0 w-80 h-80 bg-accent/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-secondary/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+        <div className="absolute top-0 right-0 w-80 h-80 bg-accent/20  blur-3xl -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-secondary/10  blur-3xl translate-y-1/2 -translate-x-1/2" />
 
         <div className="container mx-auto px-6 text-center relative">
           <h2 className="font-serif text-3xl md:text-4xl mb-6">

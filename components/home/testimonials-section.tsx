@@ -22,11 +22,7 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
   const prev = () => setCurrent((prev) => (prev - 1 + items.length) % items.length)
 
   return (
-    <section className="py-24 md:py-32 bg-gradient-to-br from-secondary via-secondary/80 to-accent/30 relative overflow-hidden">
-      {/* Decorative elements */}
-      <div className="absolute top-10 left-10 w-32 h-32 border-2 border-primary/20 rounded-full" />
-      <div className="absolute bottom-10 right-10 w-24 h-24 border-2 border-accent/30 rounded-full" />
-      <div className="absolute top-1/2 right-20 w-40 h-40 bg-primary/10 rounded-full blur-2xl" />
+    <section className="py-24 md:py-32 relative overflow-hidden">
 
       <div className="container mx-auto px-6 relative">
         <div className="max-w-4xl mx-auto text-center">
@@ -56,10 +52,10 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
             <button
               type="button"
               onClick={prev}
-              className="p-3 bg-primary/10 border border-primary/30 rounded-full hover:bg-primary/20 transition-colors"
+              className="p-3 transition-colors"
               aria-label="Previous testimonial"
             >
-              <ChevronLeft className="h-5 w-5 text-primary" />
+              <ChevronLeft className="h-5 w-5 text-primary hover:text-primary/80" />
             </button>
             <div className="flex gap-3">
               {items.map((_, index) => (
@@ -67,7 +63,7 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
                   type="button"
                   key={`dot-${index}`}
                   onClick={() => setCurrent(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  className={`w-3 h-3  transition-all duration-300 ${
                     index === current ? "bg-primary scale-125" : "bg-primary/30 hover:bg-primary/50"
                   }`}
                   aria-label={`Go to testimonial ${index + 1}`}
@@ -77,10 +73,10 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
             <button
               type="button"
               onClick={next}
-              className="p-3 bg-primary/10 border border-primary/30 rounded-full hover:bg-primary/20 transition-colors"
+              className="p-3 hover:text-primary/20 transition-colors"
               aria-label="Next testimonial"
             >
-              <ChevronRight className="h-5 w-5 text-primary" />
+              <ChevronRight className="h-5 w-5 text-primary hover:text-primary/80" />
             </button>
           </div>
         </div>

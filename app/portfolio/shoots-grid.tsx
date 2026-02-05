@@ -58,10 +58,10 @@ export function ShootsGrid({ shoots, categories }: ShootsGridProps) {
                 key={category.slug}
                 type="button"
                 onClick={() => setActiveCategory(category.slug)}
-                className={`px-6 py-2 text-sm font-medium rounded-full transition-colors ${
+                className={`px-6 py-2 text-sm font-medium transition-colors ${
                   activeCategory === category.slug
                     ? "bg-primary text-primary-foreground"
-                    : "bg-secondary text-secondary-foreground hover:bg-accent"
+                    : "border-1 border-primary text-secondary-foreground hover:bg-primary/10"
                 }`}
               >
                 {category.name}
@@ -94,7 +94,7 @@ export function ShootsGrid({ shoots, categories }: ShootsGridProps) {
                   <Link
                     key={shoot.id}
                     href={`/portfolio/${shoot.slug}`}
-                    className={`group relative aspect-[4/5] overflow-hidden bg-muted cursor-pointer rounded-2xl ${rotations[index % 5]} hover:rotate-0 transition-all duration-500 hover:scale-[1.02] block`}
+                    className={`group relative aspect-[4/5] overflow-hidden bg-muted cursor-pointer  ${rotations[index % 5]} hover:rotate-0 transition-all duration-500 hover:scale-[1.02] block`}
                   >
                     {shoot.cover_image_url ? (
                       <Image
@@ -115,7 +115,7 @@ export function ShootsGrid({ shoots, categories }: ShootsGridProps) {
                           {tags.map((tag) => (
                             <span
                               key={tag}
-                              className="inline-block px-3 py-1 text-xs uppercase tracking-[0.2em] bg-accent/90 text-accent-foreground rounded-full"
+                              className="inline-block px-3 py-1 text-xs uppercase tracking-[0.2em] bg-accent/90 text-accent-foreground "
                             >
                               {tag}
                             </span>

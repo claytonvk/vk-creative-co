@@ -144,7 +144,7 @@ export function ImageSettingUpload({
       <Label>{label}</Label>
 
       {showCompressionToggle && !previewUrl && (
-        <div className="flex items-center justify-between rounded-lg border p-3 bg-muted/30">
+        <div className="flex items-center justify-between border p-3 bg-muted/30">
           <div className="space-y-0.5">
             <Label htmlFor={`compression-${settingKey}`} className="text-sm font-medium">
               Optimize for web
@@ -165,7 +165,7 @@ export function ImageSettingUpload({
       )}
 
       <div
-        className={`relative rounded-lg border-2 border-dashed overflow-hidden transition-colors ${
+        className={`relative border-2 border-dashed overflow-hidden transition-colors ${
           error
             ? "border-destructive/50"
             : "border-muted-foreground/25 hover:border-muted-foreground/50"

@@ -145,7 +145,7 @@ export function GalleryPicker({
                     key={media.id}
                     type="button"
                     onClick={() => toggleMedia(media.id)}
-                    className={`relative aspect-square overflow-hidden rounded-lg border-2 transition-colors ${
+                    className={`relative aspect-square overflow-hidden border-2 transition-colors ${
                       selectedMediaIds.has(media.id)
                         ? "border-primary"
                         : "border-transparent hover:border-muted-foreground/30"
@@ -158,7 +158,7 @@ export function GalleryPicker({
                     />
                     {selectedMediaIds.has(media.id) && (
                       <div className="absolute inset-0 flex items-center justify-center bg-primary/30">
-                        <div className="rounded-full bg-primary p-1">
+                        <div className=" bg-primary p-1">
                           <Check className="h-4 w-4 text-primary-foreground" />
                         </div>
                       </div>

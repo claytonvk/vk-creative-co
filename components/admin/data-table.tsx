@@ -27,7 +27,7 @@ export function DataTable<T extends { id: string }>({
   onRowClick,
 }: DataTableProps<T>) {
   return (
-    <div className="rounded-md border">
+    <div className=" border">
       <Table>
         <TableHeader>
           <TableRow>

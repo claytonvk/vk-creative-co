@@ -118,9 +118,9 @@ export default async function AdminDashboard() {
               <div className="text-2xl font-bold">
                 {totalGB.toFixed(1)} GB / {maxGB} GB
               </div>
-              <div className="mt-3 h-2 w-full rounded-full bg-muted">
+              <div className="mt-3 h-2 w-full  bg-muted">
                 <div
-                  className={`h-full rounded-full ${barColor}`}
+                  className={`h-full  ${barColor}`}
                   style={{ width: `${pct}%` }}
                 />
               </div>
@@ -141,19 +141,19 @@ export default async function AdminDashboard() {
           <CardContent className="space-y-2">
             <Link
               href="/admin/portfolio"
-              className="block rounded-md p-3 text-sm transition-colors hover:bg-muted"
+              className="block p-3 text-sm transition-colors hover:bg-muted"
             >
               Add new portfolio image
             </Link>
             <Link
               href="/admin/testimonials"
-              className="block rounded-md p-3 text-sm transition-colors hover:bg-muted"
+              className="block p-3 text-sm transition-colors hover:bg-muted"
             >
               Add testimonial
             </Link>
             <Link
               href="/admin/settings"
-              className="block rounded-md p-3 text-sm transition-colors hover:bg-muted"
+              className="block p-3 text-sm transition-colors hover:bg-muted"
             >
               Update site settings
             </Link>
@@ -169,21 +169,21 @@ export default async function AdminDashboard() {
             <Link
               href="/"
               target="_blank"
-              className="block rounded-md p-3 text-sm transition-colors hover:bg-muted"
+              className="block p-3 text-sm transition-colors hover:bg-muted"
             >
               Homepage
             </Link>
             <Link
               href="/portfolio"
               target="_blank"
-              className="block rounded-md p-3 text-sm transition-colors hover:bg-muted"
+              className="block  p-3 text-sm transition-colors hover:bg-muted"
             >
               Portfolio
             </Link>
             <Link
               href="/investment"
               target="_blank"
-              className="block rounded-md p-3 text-sm transition-colors hover:bg-muted"
+              className="block p-3 text-sm transition-colors hover:bg-muted"
             >
               Investment
             </Link>

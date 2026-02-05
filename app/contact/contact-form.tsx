@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Instagram, Mail, MapPin, Calendar, CheckCircle2, XCircle } from "lucide-react"
+import { sendContactFormEmail } from "@/lib/actions/contact-form-email"
 
 type FormStatus = "idle" | "submitting" | "success" | "error"
 
@@ -48,12 +49,16 @@ export function ContactForm({ settings }: ContactFormProps) {
     e.preventDefault()
     setFormStatus("submitting")
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    const res = await sendContactFormEmail({
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone || undefined,
+      eventType: formData.eventType || undefined,
+      eventDate: formData.eventDate || undefined,
+      message: formData.message,
+    })
 
-    // Simulate success (in production, this would be an actual API call)
-    const isSuccess = Math.random() > 0.1 // 90% success rate for demo
-    setFormStatus(isSuccess ? "success" : "error")
+    setFormStatus(res?.success ? "success" : "error")
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -78,12 +83,7 @@ export function ContactForm({ settings }: ContactFormProps) {
   return (
     <>
       {/* Hero */}
-      <section className="py-24 md:py-32 bg-card relative overflow-hidden">
-        {/* Decorative elements */}
-        <div className="absolute top-10 left-10 w-32 h-32 border-2 border-primary/20 rounded-full" />
-        <div className="absolute bottom-10 right-10 w-24 h-24 border-2 border-accent/30 rounded-full" />
-        <div className="absolute top-0 right-0 w-96 h-96 bg-secondary/40 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+      <section className="pt-24 md:pt-32  relative overflow-hidden">
 
         <div className="container mx-auto px-6 text-center relative">
           <p className="text-sm uppercase tracking-[0.2em] text-primary mb-4">
@@ -105,7 +105,7 @@ export function ContactForm({ settings }: ContactFormProps) {
             {/* Form */}
             <div>
               {formStatus === "success" ? (
-                <div className="bg-gradient-to-br from-secondary to-accent/20 p-8 text-center rounded-2xl border border-primary/20">
+                <div className="p-8 text-center border border-primary/20">
                   <CheckCircle2 className="h-16 w-16 text-primary mx-auto mb-4" />
                   <h3 className="font-serif text-2xl text-foreground mb-3">Message Sent</h3>
                   <p className="text-muted-foreground mb-6">
@@ -127,8 +127,8 @@ export function ContactForm({ settings }: ContactFormProps) {
                   </Button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <form onSubmit={handleSubmit} className="border-2 border-primary p-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                     <div className="space-y-2">
                       <Label htmlFor="name">Name *</Label>
                       <Input
@@ -156,7 +156,7 @@ export function ContactForm({ settings }: ContactFormProps) {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                     <div className="space-y-2">
                       <Label htmlFor="phone">Phone</Label>
                       <Input
@@ -176,7 +176,7 @@ export function ContactForm({ settings }: ContactFormProps) {
                         name="eventType"
                         value={formData.eventType}
                         onChange={handleChange}
-                        className="flex h-9 w-full rounded-md border border-input bg-card px-3 py-1 text-sm shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                        className="flex h-9 w-full border border-input bg-card px-3 py-1 text-sm shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         <option value="">Select type...</option>
                         <option value="wedding">Wedding</option>
@@ -188,7 +188,7 @@ export function ContactForm({ settings }: ContactFormProps) {
                     </div>
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-2 mb-4">
                     <Label htmlFor="eventDate">Preferred Date</Label>
                     <Input
                       id="eventDate"
@@ -200,7 +200,7 @@ export function ContactForm({ settings }: ContactFormProps) {
                     />
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-2 mb-8">
                     <Label htmlFor="message">Tell us about your project *</Label>
                     <Textarea
                       id="message"
@@ -237,7 +237,7 @@ export function ContactForm({ settings }: ContactFormProps) {
                       href={`mailto:${email}`}
                       className="flex items-center gap-4 text-foreground hover:text-primary transition-colors"
                     >
-                      <span className="w-12 h-12 rounded-2xl bg-gradient-to-br from-secondary to-accent/30 flex items-center justify-center">
+                      <span className="w-12 h-12 flex items-center justify-center">
                         <Mail className="h-5 w-5 text-primary" />
                       </span>
                       <span>{email}</span>
@@ -250,14 +250,14 @@ export function ContactForm({ settings }: ContactFormProps) {
                       rel="noopener noreferrer"
                       className="flex items-center gap-4 text-foreground hover:text-primary transition-colors"
                     >
-                      <span className="w-12 h-12 rounded-2xl bg-gradient-to-br from-secondary to-accent/30 flex items-center justify-center">
+                      <span className="w-12 h-12 flex items-center justify-center">
                         <Instagram className="h-5 w-5 text-primary" />
                       </span>
                       <span>{instagram}</span>
                     </a>
                   </li>
                   <li className="flex items-center gap-4 text-foreground">
-                    <span className="w-12 h-12 rounded-2xl bg-gradient-to-br from-secondary to-accent/30 flex items-center justify-center">
+                    <span className="w-12 h-12 flex items-center justify-center">
                       <MapPin className="h-5 w-5 text-primary" />
                     </span>
                     <span>{address}</span>
@@ -266,7 +266,7 @@ export function ContactForm({ settings }: ContactFormProps) {
               </div>
 
               {/* Availability */}
-              <div className="bg-gradient-to-br from-secondary via-secondary/80 to-accent/20 p-8 rounded-2xl border border-primary/10">
+              <div className="p-8 border-2 border-primary">
                 <div className="flex items-center gap-3 mb-4">
                   <Calendar className="h-5 w-5 text-primary" />
                   <h3 className="font-serif text-xl text-foreground">Availability</h3>
@@ -279,7 +279,7 @@ export function ContactForm({ settings }: ContactFormProps) {
                     <span className="text-foreground">{currentYear}</span>
                     <span className="text-accent font-medium">{currentYearStatus}</span>
                   </div>
-                  <div className="w-full bg-muted h-2 rounded-full overflow-hidden">
+                  <div className="w-full bg-muted h-2  overflow-hidden">
                     <div className="bg-accent h-full" style={{ width: `${currentYearPercent}%` }} />
                   </div>
                 </div>
@@ -288,7 +288,7 @@ export function ContactForm({ settings }: ContactFormProps) {
                     <span className="text-foreground">{nextYear}</span>
                     <span className="text-primary font-medium">{nextYearStatus}</span>
                   </div>
-                  <div className="w-full bg-muted h-2 rounded-full overflow-hidden">
+                  <div className="w-full bg-muted h-2  overflow-hidden">
                     <div className="bg-primary h-full" style={{ width: `${nextYearPercent}%` }} />
                   </div>
                 </div>

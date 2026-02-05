@@ -122,7 +122,7 @@ export function Navbar() {
             ) : (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="border-primary/50 hover:bg-primary/10">
+                  <Button variant="outline" className="text-primary border-primary/50 hover:bg-primary/10">
                     Sign In
                   </Button>
                 </DropdownMenuTrigger>

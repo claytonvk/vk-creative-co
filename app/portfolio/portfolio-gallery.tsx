@@ -51,10 +51,10 @@ export function PortfolioGallery({ images, categories }: PortfolioGalleryProps) 
                 key={category.slug}
                 type="button"
                 onClick={() => setActiveCategory(category.slug)}
-                className={`px-6 py-2 text-sm font-medium rounded-full transition-colors ${
+                className={`px-6 py-2 text-sm font-medium transition-colors ${
                   activeCategory === category.slug
                     ? "bg-primary text-primary-foreground"
-                    : "bg-secondary text-secondary-foreground hover:bg-accent"
+                    : "border-secondary text-secondary-foreground hover:border-accent"
                 }`}
               >
                 {category.name}
@@ -84,7 +84,7 @@ export function PortfolioGallery({ images, categories }: PortfolioGalleryProps) 
                     key={item.id}
                     type="button"
                     onClick={() => openLightbox(index)}
-                    className={`group relative aspect-[4/5] overflow-hidden bg-muted cursor-pointer text-left rounded-2xl ${rotations[index % 5]} hover:rotate-0 transition-all duration-500 hover:scale-[1.02]`}
+                    className={`group relative aspect-[4/5] overflow-hidden bg-muted cursor-pointer text-left ${rotations[index % 5]} hover:rotate-0 transition-all duration-500 hover:scale-[1.02]`}
                   >
                     <Image
                       src={item.image_url || "/placeholder.svg"}
@@ -94,7 +94,7 @@ export function PortfolioGallery({ images, categories }: PortfolioGalleryProps) 
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                      <span className="inline-block px-3 py-1 text-xs uppercase tracking-[0.2em] bg-accent/90 text-accent-foreground rounded-full mb-2">
+                      <span className="inline-block px-3 py-1 text-xs uppercase tracking-[0.2em] bg-accent/90 text-accent-foreground mb-2">
                         {item.categories?.name || "Uncategorized"}
                       </span>
                       <h3 className="font-serif text-xl text-primary-foreground">{item.title}</h3>

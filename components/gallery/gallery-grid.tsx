@@ -69,7 +69,7 @@ export function GalleryGrid({
           return (
             <div
               key={item.id}
-              className={`group relative mb-4 cursor-pointer break-inside-avoid overflow-hidden rounded-lg transition-all ${
+              className={`group relative mb-4 cursor-pointer break-inside-avoid overflow-hidden transition-all ${
                 isSelected ? "ring-2 ring-offset-2" : ""
               }`}
               style={isSelected ? { "--tw-ring-color": themeColor } as React.CSSProperties : undefined}
@@ -87,7 +87,7 @@ export function GalleryGrid({
                     preload="metadata"
                   />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="rounded-full bg-white/90 p-3">
+                    <div className=" bg-white/90 p-3">
                       <Play className="h-6 w-6 text-black" />
                     </div>
                   </div>
@@ -107,7 +107,7 @@ export function GalleryGrid({
               {allowDownloads && (
                 <button
                   type="button"
-                  className={`absolute left-3 top-3 flex h-6 w-6 items-center justify-center rounded-full border-2 transition-all ${
+                  className={`absolute left-3 top-3 flex h-6 w-6 items-center justify-center  border-2 transition-all ${
                     isSelected
                       ? "text-white"
                       : "border-white bg-black/30 text-white opacity-0 group-hover:opacity-100"

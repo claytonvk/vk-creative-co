@@ -18,7 +18,7 @@ export function HeroSection({ settings }: HeroSectionProps) {
   const ctaText = settings.hero_cta_text || "View Our Work"
   const ctaLink = settings.hero_cta_link || "/portfolio"
   const secondaryCtaText = settings.hero_secondary_cta_text || "Watch Showreel"
-  const backgroundImage = settings.hero_background_image || "/images/hero-bg.jpg"
+  const backgroundImage = settings.hero_background_image
 
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
@@ -30,8 +30,8 @@ export function HeroSection({ settings }: HeroSectionProps) {
         />
       </div>
       {/* Decorative accent shapes */}
-      <div className="absolute top-20 right-10 w-64 h-64 bg-accent/20 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 left-10 w-48 h-48 bg-secondary/30 rounded-full blur-3xl" />
+      <div className="absolute top-20 right-10 w-64 h-64 bg-accent/20  blur-3xl" />
+      <div className="absolute bottom-20 left-10 w-48 h-48 bg-secondary/30  blur-3xl" />
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-6 text-center text-primary-foreground">
@@ -77,7 +77,7 @@ export function HeroSection({ settings }: HeroSectionProps) {
           role="button"
           tabIndex={0}
         >
-          <div className="relative w-full max-w-4xl aspect-video bg-foreground border border-border rounded-lg flex items-center justify-center">
+          <div className="relative w-full max-w-4xl aspect-video bg-foreground border border-border flex items-center justify-center">
             <p className="text-primary-foreground/50">Showreel video placeholder</p>
             <button
               type="button"

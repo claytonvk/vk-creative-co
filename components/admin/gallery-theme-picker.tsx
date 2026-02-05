@@ -58,7 +58,7 @@ export function GalleryThemePicker({ value, onChange }: GalleryThemePickerProps)
           key={theme.id}
           type="button"
           className={cn(
-            "flex flex-col overflow-hidden rounded-lg border-2 text-left transition-all",
+            "flex flex-col overflow-hidden border-2 text-left transition-all",
             value === theme.id
               ? "border-primary ring-2 ring-primary ring-offset-2"
               : "border-muted hover:border-muted-foreground/50"
