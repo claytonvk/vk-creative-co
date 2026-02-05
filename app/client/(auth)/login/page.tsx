@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -15,7 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { toast } from "sonner"
-import { clientLogin } from "@/lib/actions/client-auth"
+import { clientLogin, isClient } from "@/lib/actions/client-auth"
 
 export default function ClientLoginPage() {
   const router = useRouter()
@@ -24,6 +24,12 @@ export default function ClientLoginPage() {
     email: "",
     password: "",
   })
+
+  useEffect(() => {
+    isClient().then((isAuthed) => {
+      if (isAuthed) router.replace("/client")
+    })
+  }, [router])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()

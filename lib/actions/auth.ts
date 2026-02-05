@@ -50,3 +50,19 @@ export async function getSession() {
   const { data: { session } } = await supabase.auth.getSession()
   return session
 }
+
+export async function checkAdminAuth() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) return false
+
+  const { data } = await supabase
+    .from("admin_users")
+    .select("id")
+    .eq("user_id", user.id)
+    .eq("is_active", true)
+    .single()
+
+  return !!data
+}
