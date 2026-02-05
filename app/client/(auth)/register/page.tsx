@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, Suspense } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -15,7 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { toast } from "sonner"
-import { clientRegister } from "@/lib/actions/client-auth"
+import { clientRegister, checkInviteEmail } from "@/lib/actions/client-auth"
 
 function RegisterForm() {
   const router = useRouter()
@@ -23,6 +23,8 @@ function RegisterForm() {
   const emailFromParams = searchParams.get("email") || ""
 
   const [isLoading, setIsLoading] = useState(false)
+  const [isVerifying, setIsVerifying] = useState(true)
+  const [inviteError, setInviteError] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     email: emailFromParams,
     password: "",
@@ -30,6 +32,21 @@ function RegisterForm() {
     name: "",
     phone: "",
   })
+
+  useEffect(() => {
+    if (!emailFromParams) {
+      setInviteError("not_found")
+      setIsVerifying(false)
+      return
+    }
+
+    checkInviteEmail(emailFromParams).then((result) => {
+      if ("error" in result) {
+        setInviteError(result.error)
+      }
+      setIsVerifying(false)
+    })
+  }, [emailFromParams])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -65,6 +82,52 @@ function RegisterForm() {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  if (isVerifying) {
+    return (
+      <Card>
+        <CardContent className="py-12 text-center text-muted-foreground">
+          Verifying invitation...
+        </CardContent>
+      </Card>
+    )
+  }
+
+  if (inviteError === "not_found") {
+    return (
+      <Card>
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl">Invitation Required</CardTitle>
+          <CardDescription>
+            Registration is by invitation only. If you've received an email from VK Creative, please use the link provided.
+          </CardDescription>
+        </CardHeader>
+        <CardFooter className="justify-center">
+          <Link href="/client/login">
+            <Button variant="outline">Back to Sign In</Button>
+          </Link>
+        </CardFooter>
+      </Card>
+    )
+  }
+
+  if (inviteError === "already_registered") {
+    return (
+      <Card>
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl">Already Registered</CardTitle>
+          <CardDescription>
+            An account already exists for this email. Please sign in instead.
+          </CardDescription>
+        </CardHeader>
+        <CardFooter className="justify-center">
+          <Link href="/client/login">
+            <Button>Sign In</Button>
+          </Link>
+        </CardFooter>
+      </Card>
+    )
   }
 
   return (

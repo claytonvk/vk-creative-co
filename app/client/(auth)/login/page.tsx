@@ -94,13 +94,7 @@ export default function ClientLoginPage() {
           </Button>
         </form>
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-center text-sm">
-        <p className="text-muted-foreground">
-          Don't have an account?{" "}
-          <Link href="/client/register" className="text-primary hover:underline">
-            Register
-          </Link>
-        </p>
+      <CardFooter className="text-center text-sm">
         <Link href="/" className="text-muted-foreground hover:underline">
           Back to website
         </Link>

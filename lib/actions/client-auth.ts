@@ -118,6 +118,26 @@ export async function getClientProfile() {
   return client
 }
 
+export async function checkInviteEmail(email: string) {
+  const supabase = await createClient()
+
+  const { data: client } = await supabase
+    .from("clients")
+    .select("id, user_id")
+    .eq("email", email)
+    .single()
+
+  if (!client) {
+    return { error: "not_found" as const }
+  }
+
+  if (client.user_id) {
+    return { error: "already_registered" as const }
+  }
+
+  return { valid: true as const }
+}
+
 export async function isClient() {
   const supabase = await createClient()
 

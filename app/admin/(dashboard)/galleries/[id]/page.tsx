@@ -58,6 +58,7 @@ export default function GalleryEditPage() {
   const [gallery, setGallery] = useState<GalleryWithMedia | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
+  const [isSending, setIsSending] = useState(false)
   const [formData, setFormData] = useState({
     name: "",
     client_name: "",
@@ -169,6 +170,7 @@ export default function GalleryEditPage() {
   }
 
   async function handleSendEmail() {
+    setIsSending(true)
     try {
       const result = await sendGalleryReadyEmail(galleryId)
       if (result.error) {
@@ -178,6 +180,8 @@ export default function GalleryEditPage() {
       toast.success("Email sent to client")
     } catch (error) {
       toast.error("Failed to send email")
+    } finally {
+      setIsSending(false)
     }
   }
 
@@ -274,9 +278,9 @@ export default function GalleryEditPage() {
                   Regenerate Link
                 </Button>
                 {gallery.is_published && (
-                  <Button onClick={handleSendEmail}>
+                  <Button type="button" onClick={handleSendEmail} disabled={isSending}>
                     <Mail className="mr-2 h-4 w-4" />
-                    Send to Client
+                    {isSending ? "Sending..." : "Send to Client"}
                   </Button>
                 )}
               </div>
