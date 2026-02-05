@@ -114,7 +114,7 @@ export function Navbar() {
             ))}
             {isAuthed ? (
               <Button asChild variant="outline" className="border-primary/50 hover:bg-primary/10">
-                <Link href={dashboardHref!} className="flex items-center gap-2">
+                <Link href={dashboardHref!} className="text-primary flex items-center gap-2">
                   <LayoutDashboard className="h-4 w-4" />
                   Dashboard
                 </Link>
