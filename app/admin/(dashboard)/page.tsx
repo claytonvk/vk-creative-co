@@ -1,25 +1,38 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { PageHeader } from "@/components/admin/page-header"
 import { createClient } from "@/lib/supabase/server"
-import { Image, Package, MessageSquareQuote, HelpCircle } from "lucide-react"
+import { Image, Package, MessageSquareQuote, HelpCircle, HardDrive } from "lucide-react"
 import Link from "next/link"
 
 async function getStats() {
   const supabase = await createClient()
 
-  const [portfolioResult, packagesResult, testimonialsResult, faqsResult] =
+  const [portfolioResult, packagesResult, testimonialsResult, faqsResult, galleryMediaResult, shootMediaResult] =
     await Promise.all([
       supabase.from("portfolio_images").select("id", { count: "exact" }),
       supabase.from("investment_packages").select("id", { count: "exact" }),
       supabase.from("testimonials").select("id", { count: "exact" }),
       supabase.from("faqs").select("id", { count: "exact" }),
+      supabase.from("gallery_media").select("file_size"),
+      supabase.from("shoot_media").select("file_size"),
     ])
+
+  const galleryBytes = (galleryMediaResult.data ?? []).reduce(
+    (sum, row) => sum + (row.file_size ?? 0),
+    0,
+  )
+  const portfolioBytes = (shootMediaResult.data ?? []).reduce(
+    (sum, row) => sum + (row.file_size ?? 0),
+    0,
+  )
 
   return {
     portfolio: portfolioResult.count || 0,
     packages: packagesResult.count || 0,
     testimonials: testimonialsResult.count || 0,
     faqs: faqsResult.count || 0,
+    galleryBytes,
+    portfolioBytes,
   }
 }
 
@@ -84,6 +97,40 @@ export default async function AdminDashboard() {
           </Link>
         ))}
       </div>
+
+      {(() => {
+        const totalBytes = stats.galleryBytes + stats.portfolioBytes
+        const totalGB = totalBytes / 1_073_741_824
+        const galleryGB = stats.galleryBytes / 1_073_741_824
+        const portfolioGB = stats.portfolioBytes / 1_073_741_824
+        const maxGB = 100
+        const pct = Math.min((totalGB / maxGB) * 100, 100)
+        const barColor =
+          totalGB > 90 ? "bg-red-500" : totalGB > 70 ? "bg-yellow-500" : "bg-green-500"
+
+        return (
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium">Storage</CardTitle>
+              <HardDrive className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                {totalGB.toFixed(1)} GB / {maxGB} GB
+              </div>
+              <div className="mt-3 h-2 w-full rounded-full bg-muted">
+                <div
+                  className={`h-full rounded-full ${barColor}`}
+                  style={{ width: `${pct}%` }}
+                />
+              </div>
+              <p className="mt-2 text-xs text-muted-foreground">
+                Galleries: {galleryGB.toFixed(1)} GB · Portfolio: {portfolioGB.toFixed(1)} GB
+              </p>
+            </CardContent>
+          </Card>
+        )
+      })()}
 
       <div className="grid gap-4 md:grid-cols-2">
         <Card>

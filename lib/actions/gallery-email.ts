@@ -37,7 +37,7 @@ export async function sendGalleryReadyEmail(galleryId: string) {
   const galleryUrl = `${siteUrl}/gallery/${gallery.slug}`
 
   if (gallery.access_mode === "client_account") {
-    return await sendClientAccountEmail(gallery, galleryUrl)
+    return await sendClientAccountEmail(gallery)
   }
 
   return await sendGuestLinkEmail(gallery, galleryUrl)
@@ -105,7 +105,7 @@ async function sendGuestLinkEmail(gallery: any, galleryUrl: string) {
   }
 }
 
-async function sendClientAccountEmail(gallery: any, galleryUrl: string) {
+async function sendClientAccountEmail(gallery: any) {
   const supabase = await createClient()
 
   // Auto-create client record if one doesn't exist
@@ -159,34 +159,7 @@ async function sendClientAccountEmail(gallery: any, galleryUrl: string) {
     }
   }
 
-  // Determine account status for email content
-  const hasAccount = !!client.user_id
-  const registerUrl = `${siteUrl}/client/register?email=${encodeURIComponent(gallery.client_email)}`
-  const loginUrl = `${siteUrl}/client/login`
-
-  const accountSection = hasAccount
-    ? `
-      <div style="text-align: center; margin: 20px 0;">
-        <a href="${loginUrl}"
-           style="background-color: transparent; color: #1a1a1a; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: 500; border: 1px solid #1a1a1a;">
-          Sign In to Your Dashboard
-        </a>
-      </div>
-      <p style="color: #666; font-size: 14px; text-align: center;">
-        This gallery is also available in your client dashboard.
-      </p>
-    `
-    : `
-      <div style="text-align: center; margin: 20px 0;">
-        <a href="${registerUrl}"
-           style="background-color: transparent; color: #1a1a1a; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: 500; border: 1px solid #1a1a1a;">
-          Create Your Account
-        </a>
-      </div>
-      <p style="color: #666; font-size: 14px; text-align: center;">
-        Create an account to access all your galleries from your personal dashboard.
-      </p>
-    `
+  const loginUrl = `${siteUrl}/client/login?email=${encodeURIComponent(gallery.client_email)}&gallery=${encodeURIComponent(gallery.slug)}`
 
   try {
     await resend.emails.send({
@@ -214,13 +187,11 @@ async function sendClientAccountEmail(gallery: any, galleryUrl: string) {
           ${gallery.description ? `<p style="color: #666; font-style: italic;">${gallery.description}</p>` : ''}
 
           <div style="text-align: center; margin: 30px 0;">
-            <a href="${galleryUrl}"
+            <a href="${loginUrl}"
                style="background-color: #1a1a1a; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: 500;">
               View Your Gallery
             </a>
           </div>
-
-          ${accountSection}
 
           ${gallery.expires_at ? `
             <p style="color: #666; font-size: 14px; text-align: center;">
