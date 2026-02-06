@@ -93,7 +93,7 @@ export function PortfolioGallery({ images, categories }: PortfolioGalleryProps) 
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                    <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-0 md:translate-y-full md:group-hover:translate-y-0 transition-transform duration-300">
                       <span className="inline-block px-3 py-1 text-xs uppercase tracking-[0.2em] bg-accent/90 text-accent-foreground mb-2">
                         {item.categories?.name || "Uncategorized"}
                       </span>

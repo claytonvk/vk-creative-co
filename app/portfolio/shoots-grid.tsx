@@ -109,7 +109,7 @@ export function ShootsGrid({ shoots, categories }: ShootsGridProps) {
                       </div>
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                    <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-0 md:translate-y-full md:group-hover:translate-y-0 transition-transform duration-300">
                       {tags.length > 0 && (
                         <div className="flex flex-wrap gap-1.5 mb-2">
                           {tags.map((tag) => (

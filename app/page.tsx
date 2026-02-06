@@ -7,6 +7,7 @@ import { getHeroSettings, getCTASettings } from "@/lib/queries/settings"
 import { getValueProps } from "@/lib/queries/value-props"
 import { getFeaturedShoots } from "@/lib/queries/shoots"
 import { getFeaturedTestimonials } from "@/lib/queries/testimonials"
+import { SingleImageSection } from "@/components/home/single-image-section"
 
 export default async function HomePage() {
   let heroSettings = {}
@@ -36,6 +37,7 @@ export default async function HomePage() {
     <>
       <HeroSection settings={heroSettings} />
       <ValuePropsSection valueProps={valueProps} />
+      <SingleImageSection src="/images/moon-fancy.png" />
       <FeaturedWorkSection images={featuredImages} />
       <TestimonialsSection testimonials={testimonials} />
       <CTASection settings={ctaSettings} />
