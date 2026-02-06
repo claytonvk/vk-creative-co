@@ -20,8 +20,7 @@ export default async function InvestmentPage() {
 
   const tagline = settings.investment_tagline || "Pricing"
   const title = settings.investment_title || "Investment"
-  const description = settings.investment_description || "Transparent pricing for exceptional work. Every package is customizable to fit your unique needs."
-
+  const description = settings.investment_description
   const customText = settings.investment_custom_text || "Have any questions or need a custom package?"
 
   return (
@@ -36,9 +35,16 @@ export default async function InvestmentPage() {
           <h1 className="font-serif text-5xl md:text-6xl text-foreground mb-6">
             {title}
           </h1>
-          <p className="max-w-xl mx-auto text-muted-foreground leading-relaxed">
-            {description}
-          </p>
+          {
+            description
+              ?
+                <p className="max-w-xl mx-auto text-muted-foreground leading-relaxed">
+                  {description}
+                </p>
+              :
+                null
+          }
+
         </div>
       </section>
 
