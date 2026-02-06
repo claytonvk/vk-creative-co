@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Download, Loader2, CheckSquare, Square, Share2, Images, Check } from "lucide-react"
+import { Download, Loader2, CheckSquare, Square, Share2, LayoutDashboard, Check } from "lucide-react"
 import type { ClientGalleryWithMedia } from "@/lib/supabase/types"
 
 interface GalleryHeaderProps {
@@ -12,6 +12,7 @@ interface GalleryHeaderProps {
   onToggleSelectionMode?: () => void
   hasCoverHero?: boolean
   themeColor?: string
+  portalType?: "admin" | "client"
 }
 
 export function GalleryHeader({
@@ -20,6 +21,7 @@ export function GalleryHeader({
   onToggleSelectionMode,
   hasCoverHero = false,
   themeColor = "#1a1a1a",
+  portalType,
 }: GalleryHeaderProps) {
   const [isDownloading, setIsDownloading] = useState(false)
   const [copied, setCopied] = useState(false)
@@ -172,12 +174,14 @@ export function GalleryHeader({
             </Button>
           )}
 
-          <Link href="/client">
-            <Button variant="outline" className="gallery-button">
-              <Images className="mr-2 h-4 w-4" />
-              My Galleries
-            </Button>
-          </Link>
+          {portalType && (
+            <Link href={portalType === "admin" ? "/admin" : "/client"}>
+              <Button variant="outline" className="gallery-button">
+                <LayoutDashboard className="mr-2 h-4 w-4" />
+                Dashboard
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
     </header>

@@ -1,3 +1,4 @@
+import { cookies } from "next/headers"
 import { notFound } from "next/navigation"
 import { getGalleryBySlug } from "@/lib/queries/galleries"
 import { trackGalleryView } from "@/lib/actions/gallery-analytics"
@@ -31,8 +32,12 @@ export default async function GalleryPage({ params }: GalleryPageProps) {
     notFound()
   }
 
+  // Check portal type for dashboard link
+  const cookieStore = await cookies()
+  const portalType = cookieStore.get("portal_type")?.value as "admin" | "client" | undefined
+
   // Track view
   await trackGalleryView(gallery.id)
 
-  return <GalleryView gallery={gallery} />
+  return <GalleryView gallery={gallery} portalType={portalType} />
 }

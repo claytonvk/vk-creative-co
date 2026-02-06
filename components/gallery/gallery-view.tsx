@@ -13,9 +13,10 @@ import { EditorialTheme } from "./themes/editorial"
 
 interface GalleryViewProps {
   gallery: ClientGalleryWithMedia
+  portalType?: "admin" | "client"
 }
 
-export function GalleryView({ gallery }: GalleryViewProps) {
+export function GalleryView({ gallery, portalType }: GalleryViewProps) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [isSelectionMode, setIsSelectionMode] = useState(false)
@@ -106,6 +107,7 @@ export function GalleryView({ gallery }: GalleryViewProps) {
         }}
         hasCoverHero={!!gallery.cover_image_url}
         themeColor={themeColor}
+        portalType={portalType}
       />
       <GalleryGrid
         media={gallery.gallery_media || []}
