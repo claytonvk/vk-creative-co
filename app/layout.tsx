@@ -38,9 +38,7 @@ export const metadata: Metadata = {
     description: 'Cinematic photo and video for weddings, brands, and lifestyle. Creating timeless visual stories.',
     images: [
       {
-        url: '/og-image.png',
-        width: 1200,
-        height: 630,
+        url: '/images/logo.png',
         alt: 'VK Creative',
       },
     ],
@@ -49,7 +47,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'VK Creative | Cinematic Photo & Video',
     description: 'Cinematic photo and video for weddings, brands, and lifestyle.',
-    images: ['/og-image.png'],
+    images: ['/images/logo.png'],
   },
   icons: {
     icon: [
