@@ -32,7 +32,6 @@ import {
   Copy,
   ExternalLink,
   Mail,
-  RefreshCw,
   Images,
   BarChart3,
 } from "lucide-react"
@@ -42,7 +41,6 @@ import {
   updateGallery,
   publishGallery,
   unpublishGallery,
-  regenerateAccessToken,
 } from "@/lib/actions/galleries"
 import { sendGalleryReadyEmail } from "@/lib/actions/gallery-email"
 
@@ -59,6 +57,7 @@ export default function GalleryEditPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
   const [isSending, setIsSending] = useState(false)
+  const [emailLocked, setEmailLocked] = useState(true)
   const [formData, setFormData] = useState({
     name: "",
     client_name: "",
@@ -147,22 +146,6 @@ export default function GalleryEditPage() {
         return
       }
       toast.success(gallery?.is_published ? "Gallery unpublished" : "Gallery published")
-      loadGallery()
-    } catch (error) {
-      toast.error("An error occurred")
-    }
-  }
-
-  async function handleRegenerateToken() {
-    if (!confirm("This will invalidate the current gallery link. Continue?")) return
-
-    try {
-      const result = await regenerateAccessToken(galleryId)
-      if (result.error) {
-        toast.error(result.error)
-        return
-      }
-      toast.success("New access token generated")
       loadGallery()
     } catch (error) {
       toast.error("An error occurred")
@@ -268,22 +251,12 @@ export default function GalleryEditPage() {
                   </Button>
                 )}
               </div>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  onClick={handleRegenerateToken}
-                  className="text-muted-foreground"
-                >
-                  <RefreshCw className="mr-2 h-4 w-4" />
-                  Regenerate Link
+              {gallery.is_published && (
+                <Button type="button" onClick={handleSendEmail} disabled={isSending}>
+                  <Mail className="mr-2 h-4 w-4" />
+                  {isSending ? "Sending..." : "Send to Client"}
                 </Button>
-                {gallery.is_published && (
-                  <Button type="button" onClick={handleSendEmail} disabled={isSending}>
-                    <Mail className="mr-2 h-4 w-4" />
-                    {isSending ? "Sending..." : "Send to Client"}
-                  </Button>
-                )}
-              </div>
+              )}
             </CardContent>
           </Card>
 
@@ -333,7 +306,29 @@ export default function GalleryEditPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="client_email">Client Email</Label>
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="client_email">Client Email</Label>
+                      {emailLocked ? (
+                        <button
+                          type="button"
+                          onClick={() => setEmailLocked(false)}
+                          className="text-xs text-muted-foreground hover:text-foreground"
+                        >
+                          Change email
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setEmailLocked(true)
+                            setFormData({ ...formData, client_email: gallery?.client_email || "" })
+                          }}
+                          className="text-xs text-muted-foreground hover:text-foreground"
+                        >
+                          Cancel
+                        </button>
+                      )}
+                    </div>
                     <Input
                       id="client_email"
                       type="email"
@@ -342,7 +337,14 @@ export default function GalleryEditPage() {
                         setFormData({ ...formData, client_email: e.target.value })
                       }
                       required
+                      disabled={emailLocked}
+                      className={emailLocked ? "bg-muted" : ""}
                     />
+                    {!emailLocked && (
+                      <p className="text-xs text-amber-600">
+                        Changing the email will transfer this gallery to a different client account.
+                      </p>
+                    )}
                   </div>
                 </div>
 

@@ -17,11 +17,11 @@ async function getStats() {
       supabase.from("shoot_media").select("file_size"),
     ])
 
-  const galleryBytes = (galleryMediaResult.data ?? []).reduce(
+  const galleryBytes = ((galleryMediaResult.data ?? []) as { file_size: number | null }[]).reduce(
     (sum, row) => sum + (row.file_size ?? 0),
     0,
   )
-  const portfolioBytes = (shootMediaResult.data ?? []).reduce(
+  const portfolioBytes = ((shootMediaResult.data ?? []) as { file_size: number | null }[]).reduce(
     (sum, row) => sum + (row.file_size ?? 0),
     0,
   )

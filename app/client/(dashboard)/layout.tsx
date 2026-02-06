@@ -1,8 +1,9 @@
+import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { LogOut, Images } from "lucide-react"
-import { getClientProfile, isClient } from "@/lib/actions/client-auth"
+import { getClientProfile } from "@/lib/actions/client-auth"
 import { clientLogout } from "@/lib/actions/client-auth"
 
 export default async function ClientDashboardLayout({
@@ -10,6 +11,14 @@ export default async function ClientDashboardLayout({
 }: {
   children: React.ReactNode
 }) {
+  // Check portal cookie first - must be logged in as client
+  const cookieStore = await cookies()
+  const portalType = cookieStore.get("portal_type")?.value
+
+  if (portalType !== "client") {
+    redirect("/client/switch")
+  }
+
   const client = await getClientProfile()
 
   if (!client) {

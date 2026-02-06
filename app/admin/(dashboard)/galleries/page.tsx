@@ -30,6 +30,7 @@ import {
   getGalleries,
   createGallery,
   deleteGallery,
+  backfillGalleryClients,
 } from "@/lib/actions/galleries"
 
 type GalleryWithCount = ClientGallery & {
@@ -66,6 +67,8 @@ export default function GalleriesPage() {
 
   async function loadData() {
     try {
+      // Auto-backfill client records for any galleries missing them
+      await backfillGalleryClients()
       const data = await getGalleries()
       setGalleries(data as GalleryWithCount[])
     } catch (error) {

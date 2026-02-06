@@ -1,3 +1,4 @@
+import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { getUser, isAdmin } from "@/lib/supabase/server"
 import { Sidebar } from "@/components/admin/sidebar"
@@ -7,6 +8,14 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode
 }) {
+  // Check portal cookie first - must be logged in as admin
+  const cookieStore = await cookies()
+  const portalType = cookieStore.get("portal_type")?.value
+
+  if (portalType !== "admin") {
+    redirect("/admin/switch")
+  }
+
   const user = await getUser()
 
   if (!user) {

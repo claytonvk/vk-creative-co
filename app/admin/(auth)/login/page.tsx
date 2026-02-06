@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { login, checkAdminAuth } from "@/lib/actions/auth"
+import { login, isAdminPortal } from "@/lib/actions/auth"
 
 export default function LoginPage() {
   const [error, setError] = useState<string | null>(null)
@@ -14,8 +14,8 @@ export default function LoginPage() {
   const router = useRouter()
 
   useEffect(() => {
-    checkAdminAuth().then((isAuthed) => {
-      if (isAuthed) router.replace("/admin")
+    isAdminPortal().then((isAdmin) => {
+      if (isAdmin) router.replace("/admin")
     })
   }, [router])
 

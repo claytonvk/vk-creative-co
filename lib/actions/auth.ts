@@ -1,8 +1,11 @@
 "use server"
 
+import { cookies } from "next/headers"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
+
+const PORTAL_COOKIE = "portal_type"
 
 export async function login(formData: FormData) {
   const supabase = await createClient()
@@ -34,6 +37,15 @@ export async function login(formData: FormData) {
     }
   }
 
+  // Set portal cookie to admin
+  const cookieStore = await cookies()
+  cookieStore.set(PORTAL_COOKIE, "admin", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+  })
+
   revalidatePath("/admin", "layout")
   redirect("/admin")
 }
@@ -41,8 +53,22 @@ export async function login(formData: FormData) {
 export async function logout() {
   const supabase = await createClient()
   await supabase.auth.signOut()
+
+  // Clear portal cookie
+  const cookieStore = await cookies()
+  cookieStore.delete(PORTAL_COOKIE)
+
   revalidatePath("/", "layout")
   redirect("/admin/login")
+}
+
+export async function switchToAdminPortal() {
+  const supabase = await createClient()
+  await supabase.auth.signOut()
+
+  // Clear portal cookie
+  const cookieStore = await cookies()
+  cookieStore.delete(PORTAL_COOKIE)
 }
 
 export async function getSession() {
@@ -65,4 +91,10 @@ export async function checkAdminAuth() {
     .single()
 
   return !!data
+}
+
+export async function isAdminPortal() {
+  const cookieStore = await cookies()
+  const portalType = cookieStore.get(PORTAL_COOKIE)?.value
+  return portalType === "admin"
 }

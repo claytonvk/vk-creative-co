@@ -47,6 +47,50 @@ async function generateUniqueSlug(
   }
 }
 
+// Link a gallery to a client account based on email
+// Creates the client record if it doesn't exist
+async function linkGalleryToClient(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  galleryId: string,
+  clientEmail: string,
+  clientName: string
+) {
+  // Find or create client record
+  let { data: client } = await supabase
+    .from("clients")
+    .select("id")
+    .eq("email", clientEmail)
+    .single()
+
+  if (!client) {
+    // Create client record (without user_id - they'll link it when they sign up)
+    const { data: newClient, error: createError } = await supabase
+      .from("clients")
+      .insert({ email: clientEmail, name: clientName })
+      .select("id")
+      .single()
+
+    if (createError) {
+      console.error("Failed to create client:", createError)
+      return
+    }
+    client = newClient
+  }
+
+  if (!client) return
+
+  // Remove any existing gallery_clients links for this gallery
+  await supabase
+    .from("gallery_clients")
+    .delete()
+    .eq("gallery_id", galleryId)
+
+  // Create new link
+  await supabase
+    .from("gallery_clients")
+    .insert({ gallery_id: galleryId, client_id: client.id })
+}
+
 export async function getGalleries() {
   const supabase = await createClient()
   const { data, error } = await supabase
@@ -115,6 +159,11 @@ export async function createGallery(formData: FormData) {
     return { error: error.message }
   }
 
+  // Link gallery to client account
+  if (data) {
+    await linkGalleryToClient(supabase, data.id, client_email, client_name)
+  }
+
   revalidatePath("/admin/galleries")
   return { data }
 }
@@ -139,10 +188,10 @@ export async function updateGallery(id: string, formData: FormData) {
   const allow_bulk_download = formData.get("allow_bulk_download") === "true"
   const cover_image_url = formData.get("cover_image_url") as string | null
 
-  // Get current gallery to check if name changed
+  // Get current gallery to check if name/email changed
   const { data: currentGallery } = await supabase
     .from("client_galleries")
-    .select("name, slug")
+    .select("name, slug, client_email")
     .eq("id", id)
     .single()
 
@@ -151,6 +200,8 @@ export async function updateGallery(id: string, formData: FormData) {
   if (currentGallery && currentGallery.name !== name) {
     slug = await generateUniqueSlug(supabase, name, id)
   }
+
+  const emailChanged = currentGallery && currentGallery.client_email !== client_email
 
   const { data, error } = await supabase
     .from("client_galleries")
@@ -175,6 +226,11 @@ export async function updateGallery(id: string, formData: FormData) {
 
   if (error) {
     return { error: error.message }
+  }
+
+  // Re-link gallery to client if email changed
+  if (emailChanged) {
+    await linkGalleryToClient(supabase, id, client_email, client_name)
   }
 
   revalidatePath("/admin/galleries")
@@ -457,6 +513,39 @@ export async function regenerateAccessToken(id: string) {
 
   revalidatePath(`/admin/galleries/${id}`)
   return { data }
+}
+
+// Backfill client records for all galleries that don't have them
+export async function backfillGalleryClients() {
+  if (!(await isAdmin())) {
+    return { error: "Unauthorized" }
+  }
+
+  const supabase = await createClient()
+
+  // Get all galleries
+  const { data: galleries, error: fetchError } = await supabase
+    .from("client_galleries")
+    .select("id, client_email, client_name")
+
+  if (fetchError) {
+    return { error: fetchError.message }
+  }
+
+  let linked = 0
+  for (const gallery of galleries || []) {
+    if (gallery.client_email) {
+      await linkGalleryToClient(
+        supabase,
+        gallery.id,
+        gallery.client_email,
+        gallery.client_name || "Client"
+      )
+      linked++
+    }
+  }
+
+  return { success: true, linked }
 }
 
 export async function setCoverImage(galleryId: string, mediaUrl: string) {

@@ -15,7 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { toast } from "sonner"
-import { clientLogin, clientRegister, checkClientEmail, isClient } from "@/lib/actions/client-auth"
+import { clientLogin, clientRegister, checkClientEmail, isClientPortal } from "@/lib/actions/client-auth"
 
 type Step = "email" | "sign_in" | "set_password"
 
@@ -36,8 +36,8 @@ function LoginFlow() {
   const redirectPath = galleryParam ? `/gallery/${galleryParam}` : "/client"
 
   useEffect(() => {
-    isClient().then((authed) => {
-      if (authed) router.replace(redirectPath)
+    isClientPortal().then((isClient) => {
+      if (isClient) router.replace(redirectPath)
     })
   }, [router, redirectPath])
 
@@ -83,15 +83,17 @@ function LoginFlow() {
 
     try {
       const result = await clientLogin(form)
-      if (result.error) {
+      console.log("clientLogin result:", result)
+      if (result?.error) {
         toast.error(result.error)
-        return
+        setIsLoading(false)
+      } else {
+        toast.success("Welcome back!")
+        window.location.href = redirectPath
       }
-      toast.success("Welcome back!")
-      router.push(redirectPath)
-    } catch {
-      toast.error("An error occurred")
-    } finally {
+    } catch (err) {
+      console.error("clientLogin error:", err)
+      toast.error("An unexpected error occurred")
       setIsLoading(false)
     }
   }
@@ -118,15 +120,17 @@ function LoginFlow() {
 
     try {
       const result = await clientRegister(form)
-      if (result.error) {
+      console.log("clientRegister result:", result)
+      if (result?.error) {
         toast.error(result.error)
-        return
+        setIsLoading(false)
+      } else {
+        toast.success("Account created!")
+        window.location.href = redirectPath
       }
-      toast.success("Account created!")
-      router.push(redirectPath)
-    } catch {
-      toast.error("An error occurred")
-    } finally {
+    } catch (err) {
+      console.error("clientRegister error:", err)
+      toast.error("An unexpected error occurred")
       setIsLoading(false)
     }
   }
