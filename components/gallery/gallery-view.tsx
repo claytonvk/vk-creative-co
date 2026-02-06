@@ -90,6 +90,7 @@ export function GalleryView({ gallery }: GalleryViewProps) {
         <GalleryHero
           coverUrl={gallery.cover_image_url}
           name={gallery.name}
+          eventDate={gallery.event_date}
           themeColor={themeColor}
         />
       )}

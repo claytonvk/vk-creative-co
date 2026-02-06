@@ -12,9 +12,6 @@ export function MinimalTheme({ children, themeColor = "#1a1a1a" }: MinimalThemeP
             "Helvetica Neue", Arial, sans-serif;
           --theme-color: ${themeColor};
         }
-        .minimal-theme .gallery-header {
-          border-bottom: 1px solid #f0f0f0;
-        }
         .minimal-theme .gallery-title {
           font-weight: 300;
           letter-spacing: 0.1em;

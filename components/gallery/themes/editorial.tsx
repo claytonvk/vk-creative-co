@@ -13,9 +13,6 @@ export function EditorialTheme({ children, themeColor = "#ffffff" }: EditorialTh
           font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
           --theme-color: ${themeColor};
         }
-        .editorial-theme .gallery-header {
-          border-bottom: 1px solid ${themeColor}30;
-        }
         .editorial-theme .gallery-title {
           font-family: "Bebas Neue", sans-serif;
           font-weight: 400;

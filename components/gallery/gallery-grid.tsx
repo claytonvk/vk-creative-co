@@ -110,7 +110,7 @@ export function GalleryGrid({
                   className={`absolute left-3 top-3 flex h-6 w-6 items-center justify-center  border-2 transition-all ${
                     isSelected
                       ? "text-white"
-                      : "border-white bg-black/30 text-white opacity-0 group-hover:opacity-100"
+                      : "border-white bg-black/30 text-white opacity-0"
                   } ${isSelectionMode ? "opacity-100" : ""}`}
                   style={isSelected ? { borderColor: themeColor, backgroundColor: themeColor } : undefined}
                   onClick={(e) => handleCheckboxClick(e, item.id)}
