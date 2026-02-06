@@ -18,20 +18,18 @@ export function HeroSection({ settings }: HeroSectionProps) {
   const ctaText = settings.hero_cta_text || "View Our Work"
   const ctaLink = settings.hero_cta_link || "/portfolio"
   const secondaryCtaText = settings.hero_secondary_cta_text || "Watch Showreel"
+  const secondaryCtaLink = settings.hero_secondary_cta_link || "/contact"
   const backgroundImage = settings.hero_background_image
 
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
       {/* Background with overlay */}
-      <div className="absolute inset-0 bg-foreground/90">
+      <div className="absolute inset-0">
         <div
-          className="absolute inset-0 bg-cover bg-center opacity-50"
+          className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url('${backgroundImage}')` }}
         />
       </div>
-      {/* Decorative accent shapes */}
-      <div className="absolute top-20 right-10 w-64 h-64 bg-accent/20  blur-3xl" />
-      <div className="absolute bottom-20 left-10 w-48 h-48 bg-secondary/30  blur-3xl" />
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-6 text-center text-primary-foreground">
@@ -57,13 +55,12 @@ export function HeroSection({ settings }: HeroSectionProps) {
             <Link href={ctaLink}>{ctaText}</Link>
           </Button>
           <Button
+            asChild
             variant="outline"
             size="lg"
             className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 px-8 bg-transparent"
-            onClick={() => setIsPlaying(!isPlaying)}
           >
-            <Play className="h-4 w-4 mr-2" />
-            {secondaryCtaText}
+            <Link href={secondaryCtaLink}>{secondaryCtaText}</Link>
           </Button>
         </div>
       </div>

@@ -7,12 +7,14 @@ import {
   Zap,
   Award,
   Users,
+  BookOpenText,
   type LucideIcon,
 } from "lucide-react"
 import type { ValueProp } from "@/lib/supabase/types"
 
 const iconMap: Record<string, LucideIcon> = {
   camera: Camera,
+  book: BookOpenText,
   film: Film,
   sparkles: Sparkles,
   heart: Heart,
@@ -57,7 +59,6 @@ export function ValuePropsSection({ valueProps }: ValuePropsSectionProps) {
   return (
     <section className="pt-24 md:pt-32  relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-secondary/30 to-transparent" />
-      <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-accent/10 blur-3xl" />
 
       <div className="container mx-auto px-6 relative">
         <div className="text-center mb-16">
