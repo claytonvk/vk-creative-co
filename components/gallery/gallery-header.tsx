@@ -1,8 +1,9 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Download, Loader2, CheckSquare, Square } from "lucide-react"
+import { Download, Loader2, CheckSquare, Square, Share2, Images, Check } from "lucide-react"
 import type { ClientGalleryWithMedia } from "@/lib/supabase/types"
 
 interface GalleryHeaderProps {
@@ -21,6 +22,43 @@ export function GalleryHeader({
   themeColor = "#1a1a1a",
 }: GalleryHeaderProps) {
   const [isDownloading, setIsDownloading] = useState(false)
+  const [copied, setCopied] = useState(false)
+
+  const handleShare = async () => {
+    const shareUrl = `${window.location.origin}/gallery/${gallery.slug}`
+    const shareData = {
+      title: gallery.name,
+      text: `Check out ${gallery.name}`,
+      url: shareUrl,
+    }
+
+    // Try native share first (mobile)
+    if (navigator.share && navigator.canShare?.(shareData)) {
+      try {
+        await navigator.share(shareData)
+        return
+      } catch {
+        // User cancelled or error, fall through to clipboard
+      }
+    }
+
+    // Fallback to clipboard
+    try {
+      await navigator.clipboard.writeText(shareUrl)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      // Fallback for older browsers
+      const textArea = document.createElement("textarea")
+      textArea.value = shareUrl
+      document.body.appendChild(textArea)
+      textArea.select()
+      document.execCommand("copy")
+      document.body.removeChild(textArea)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    }
+  }
 
   const handleDownloadAll = async () => {
     if (!gallery.allow_bulk_download) return
@@ -83,6 +121,24 @@ export function GalleryHeader({
             {gallery.gallery_media?.length || 0} photos
           </p>
 
+          <Button
+            onClick={handleShare}
+            variant="outline"
+            className="gallery-button"
+          >
+            {copied ? (
+              <>
+                <Check className="mr-2 h-4 w-4" />
+                Link Copied!
+              </>
+            ) : (
+              <>
+                <Share2 className="mr-2 h-4 w-4" />
+                Share
+              </>
+            )}
+          </Button>
+
           {gallery.allow_downloads && (
             <Button
               onClick={onToggleSelectionMode}
@@ -127,6 +183,13 @@ export function GalleryHeader({
               )}
             </Button>
           )}
+
+          <Link href="/client">
+            <Button variant="outline" className="gallery-button">
+              <Images className="mr-2 h-4 w-4" />
+              My Galleries
+            </Button>
+          </Link>
         </div>
       </div>
     </header>
