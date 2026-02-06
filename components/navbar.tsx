@@ -87,16 +87,16 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-primary/10">
-      <nav className="container mx-auto px-6 py-4">
+      <nav className="container px-6 py-4 max-w-none">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center">
             <Image
               src="/images/logo.png"
               alt="VK Creative"
-              width={120}
-              height={48}
-              className="h-10 w-auto"
+              width={80}
+              height={28}
+              className="h-6 w-auto"
               priority
             />
           </Link>

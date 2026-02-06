@@ -27,7 +27,7 @@ export async function Footer() {
           <div className="md:col-span-2">
             <Link href="/" className="inline-block">
               <Image
-                src="/images/logo.png"
+                src="/images/moon-logo.png"
                 alt="VK Creative"
                 width={150}
                 height={60}
