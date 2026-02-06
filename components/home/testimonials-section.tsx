@@ -26,7 +26,7 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
 
       <div className="container mx-auto px-6 relative">
         <div className="max-w-4xl mx-auto text-center">
-          <Quote className="h-12 w-12 text-primary mx-auto mb-8" />
+          <Quote className="h-12 w-12 text-primary mx-auto mb-8 relative z-10" />
 
           <div className="relative min-h-[200px] flex items-center justify-center">
             {items.map((testimonial, index) => (
