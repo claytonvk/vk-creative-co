@@ -8,14 +8,16 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Instagram, Mail, MapPin, Calendar, CheckCircle2, XCircle } from "lucide-react"
 import { sendContactFormEmail } from "@/lib/actions/contact-form-email"
+import type { Category } from "@/lib/supabase/types"
 
 type FormStatus = "idle" | "submitting" | "success" | "error"
 
 interface ContactFormProps {
   settings: Record<string, string | null>
+  categories: Category[]
 }
 
-export function ContactForm({ settings }: ContactFormProps) {
+export function ContactForm({ settings, categories }: ContactFormProps) {
   const [formStatus, setFormStatus] = useState<FormStatus>("idle")
   const [formData, setFormData] = useState({
     name: "",
@@ -23,6 +25,7 @@ export function ContactForm({ settings }: ContactFormProps) {
     phone: "",
     eventType: "",
     eventDate: "",
+    location: "",
     message: "",
   })
 
@@ -55,6 +58,7 @@ export function ContactForm({ settings }: ContactFormProps) {
       phone: formData.phone || undefined,
       eventType: formData.eventType || undefined,
       eventDate: formData.eventDate || undefined,
+      location: formData.location || undefined,
       message: formData.message,
     })
 
@@ -76,6 +80,7 @@ export function ContactForm({ settings }: ContactFormProps) {
       phone: "",
       eventType: "",
       eventDate: "",
+      location: "",
       message: "",
     })
   }
@@ -179,29 +184,43 @@ export function ContactForm({ settings }: ContactFormProps) {
                         className="flex h-9 w-full border border-input bg-card px-3 py-1 text-sm shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         <option value="">Select type...</option>
-                        <option value="wedding">Wedding</option>
-                        <option value="engagement">Engagement</option>
-                        <option value="brand">Brand / Commercial</option>
-                        <option value="lifestyle">Lifestyle / Portrait</option>
+                        {categories.map((category) => (
+                          <option key={category.id} value={category.slug}>
+                            {category.name}
+                          </option>
+                        ))}
                         <option value="other">Other</option>
                       </select>
                     </div>
                   </div>
 
-                  <div className="space-y-2 mb-4">
-                    <Label htmlFor="eventDate">Preferred Date</Label>
-                    <Input
-                      id="eventDate"
-                      name="eventDate"
-                      type="date"
-                      value={formData.eventDate}
-                      onChange={handleChange}
-                      className="bg-card"
-                    />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="eventDate">Preferred Date</Label>
+                      <Input
+                        id="eventDate"
+                        name="eventDate"
+                        type="date"
+                        value={formData.eventDate}
+                        onChange={handleChange}
+                        className="bg-card"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="location">Preferred Location</Label>
+                      <Input
+                        id="location"
+                        name="location"
+                        value={formData.location}
+                        onChange={handleChange}
+                        placeholder="City, venue, or TBD"
+                        className="bg-card"
+                      />
+                    </div>
                   </div>
 
                   <div className="space-y-2 mb-8">
-                    <Label htmlFor="message">Tell us about your project *</Label>
+                    <Label htmlFor="message">Tell us more about yourself *</Label>
                     <Textarea
                       id="message"
                       name="message"

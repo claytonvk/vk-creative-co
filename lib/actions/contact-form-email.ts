@@ -19,6 +19,7 @@ type ContactFormPayload = {
   phone?: string
   eventType?: string
   eventDate?: string
+  location?: string
   message: string
 }
 
@@ -55,6 +56,7 @@ export async function sendContactFormEmail(payload: ContactFormPayload) {
       phone: payload.phone ? escapeHtml(payload.phone) : "",
       eventType: escapeHtml(formatEventType(payload.eventType)),
       eventDate: payload.eventDate ? escapeHtml(payload.eventDate) : "",
+      location: payload.location ? escapeHtml(payload.location) : "",
       message: escapeHtml(payload.message),
     }
 
@@ -81,7 +83,8 @@ export async function sendContactFormEmail(payload: ContactFormPayload) {
             <p style="margin: 0 0 8px;"><strong>Email:</strong> <a href="mailto:${safe.email}">${safe.email}</a></p>
             ${safe.phone ? `<p style="margin: 0 0 8px;"><strong>Phone:</strong> <a href="tel:${safe.phone}">${safe.phone}</a></p>` : ""}
             ${safe.eventType ? `<p style="margin: 0 0 8px;"><strong>Event Type:</strong> ${safe.eventType}</p>` : ""}
-            ${safe.eventDate ? `<p style="margin: 0;"><strong>Preferred Date:</strong> ${safe.eventDate}</p>` : ""}
+            ${safe.eventDate ? `<p style="margin: 0 0 8px;"><strong>Preferred Date:</strong> ${safe.eventDate}</p>` : ""}
+            ${safe.location ? `<p style="margin: 0;"><strong>Preferred Location:</strong> ${safe.location}</p>` : ""}
           </div>
 
           <h2 style="margin: 18px 0 8px; font-size: 16px;">Message</h2>
