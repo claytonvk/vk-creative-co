@@ -63,10 +63,10 @@ export function ValuePropsSection({ valueProps }: ValuePropsSectionProps) {
       <div className="container mx-auto px-6 relative">
         <div className="text-center mb-16">
           <p className="text-sm uppercase tracking-[0.2em] text-primary mb-4">
-            Why Choose Us
+            I'm so glad you're here.
           </p>
           <h2 className="font-serif text-4xl md:text-5xl text-foreground">
-            Crafted with Care
+            Why Choose Us
           </h2>
         </div>
 
