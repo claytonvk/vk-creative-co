@@ -109,19 +109,19 @@ export function ShootDetail({
               <p className="text-muted-foreground">No images in this shoot yet.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="columns-1 gap-4 sm:columns-2 md:columns-3 lg:columns-4">
               {images.map((image, index) => (
                 <button
                   key={index}
                   type="button"
                   onClick={() => openLightbox(index)}
-                  className="group relative aspect-[4/5] overflow-hidden bg-muted cursor-pointer "
+                  className="group relative mb-4 break-inside-avoid overflow-hidden bg-muted cursor-pointer"
                 >
-                  <Image
+                  <img
                     src={image.url}
                     alt={image.alt}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="w-full transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
                   />
                 </button>
               ))}

@@ -76,21 +76,20 @@ export function PortfolioGallery({ images, categories }: PortfolioGalleryProps) 
               <p className="text-muted-foreground">No images found in this category.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="columns-1 gap-4 sm:columns-2 md:columns-3 lg:columns-4">
               {filteredItems.map((item, index) => {
-                const rotations = ["rotate-1", "-rotate-1", "rotate-0", "-rotate-2", "rotate-2"]
                 return (
                   <button
                     key={item.id}
                     type="button"
                     onClick={() => openLightbox(index)}
-                    className={`group relative aspect-[4/5] overflow-hidden bg-muted cursor-pointer text-left ${rotations[index % 5]} hover:rotate-0 transition-all duration-500 hover:scale-[1.02]`}
+                    className="group relative mb-4 break-inside-avoid overflow-hidden bg-muted cursor-pointer text-left"
                   >
-                    <Image
+                    <img
                       src={item.image_url || "/placeholder.svg"}
                       alt={item.alt_text || item.title}
-                      fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      className="w-full transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-0 md:translate-y-full md:group-hover:translate-y-0 transition-transform duration-300">
