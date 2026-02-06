@@ -37,7 +37,6 @@ export async function clientLogin(formData: FormData) {
   // Set portal cookie to client
   const cookieStore = await cookies()
   cookieStore.set(PORTAL_COOKIE, "client", {
-    httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     path: "/",
@@ -113,10 +112,9 @@ export async function clientRegister(formData: FormData) {
       return { error: linkError.message }
     }
 
-    // Set portal cookie to client
+    // Set portal cookie to client (not httpOnly so navbar can read it)
     const cookieStore = await cookies()
     cookieStore.set(PORTAL_COOKIE, "client", {
-      httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
@@ -146,7 +144,6 @@ export async function clientRegister(formData: FormData) {
   // Set portal cookie to client
   const cookieStore = await cookies()
   cookieStore.set(PORTAL_COOKIE, "client", {
-    httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     path: "/",

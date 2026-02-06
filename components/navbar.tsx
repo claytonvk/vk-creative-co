@@ -38,7 +38,23 @@ export function Navbar() {
       return
     }
 
-    // Check admin first
+    // Check portal_type cookie to determine which portal they logged into
+    const portalCookie = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("portal_type="))
+      ?.split("=")[1]
+
+    if (portalCookie === "admin") {
+      setAuth({ type: "admin" })
+      return
+    }
+
+    if (portalCookie === "client") {
+      setAuth({ type: "client" })
+      return
+    }
+
+    // Fallback: check database if no cookie (shouldn't normally happen)
     const { data: adminData } = await supabase
       .from("admin_users")
       .select("id")
@@ -51,7 +67,6 @@ export function Navbar() {
       return
     }
 
-    // Check client
     const { data: clientData } = await supabase
       .from("clients")
       .select("id")

@@ -37,10 +37,9 @@ export async function login(formData: FormData) {
     }
   }
 
-  // Set portal cookie to admin
+  // Set portal cookie to admin (not httpOnly so navbar can read it)
   const cookieStore = await cookies()
   cookieStore.set(PORTAL_COOKIE, "admin", {
-    httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     path: "/",
