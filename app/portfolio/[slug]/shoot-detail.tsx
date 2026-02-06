@@ -48,9 +48,6 @@ export function ShootDetail({
     <>
       {/* Hero */}
       <section className="pt-24 md:pt-32  relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-secondary/40  blur-3xl -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent/20  blur-3xl translate-y-1/2 -translate-x-1/2" />
-
         <div className="container mx-auto px-6 relative">
           <Link
             href="/portfolio"
