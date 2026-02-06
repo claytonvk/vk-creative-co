@@ -26,26 +26,23 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
 
       <div className="container mx-auto px-6 relative">
         <div className="max-w-4xl mx-auto text-center">
-          <Quote className="h-12 w-12 text-primary mx-auto mb-8 relative z-10" />
-
-          <div className="relative min-h-[200px] flex items-center justify-center">
-            {items.map((testimonial, index) => (
-              <div
-                key={testimonial.id}
-                className={`absolute inset-0 transition-opacity duration-500 flex flex-col items-center justify-center ${
-                  index === current ? "opacity-100" : "opacity-0 pointer-events-none"
-                }`}
-              >
-                <blockquote className="font-serif text-2xl md:text-4xl text-foreground leading-relaxed mb-8 text-balance">
-                  {`"${testimonial.quote}"`}
-                </blockquote>
-                <cite className="not-italic">
-                  <p className="font-medium text-foreground">{testimonial.author_name}</p>
-                  <p className="text-sm text-muted-foreground">{testimonial.author_role}</p>
-                </cite>
-              </div>
-            ))}
-          </div>
+          {items.map((testimonial, index) => (
+            <div
+              key={testimonial.id}
+              className={`transition-opacity duration-500 ${
+                index === current ? "opacity-100" : "opacity-0 hidden"
+              }`}
+            >
+              <Quote className="h-12 w-12 text-primary mx-auto mb-8" />
+              <blockquote className="font-serif text-2xl md:text-4xl text-foreground leading-relaxed mb-8 text-balance">
+                {`"${testimonial.quote}"`}
+              </blockquote>
+              <cite className="not-italic">
+                <p className="font-medium text-foreground">{testimonial.author_name}</p>
+                <p className="text-sm text-muted-foreground">{testimonial.author_role}</p>
+              </cite>
+            </div>
+          ))}
 
           {/* Navigation */}
           <div className="flex items-center justify-center gap-4 mt-12">
