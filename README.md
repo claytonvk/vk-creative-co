@@ -1,4 +1,4 @@
-# VK Creative Studio
+# VK Creative Co
 
 > A full-featured photography & videography portfolio website with client gallery management, built with Next.js 16 and Supabase.
 
@@ -6,7 +6,7 @@
 
 ## Overview
 
-VK Creative Studio is a marketing and client-management platform for a creative photography/videography business. It combines a polished public-facing website with a full-featured admin dashboard and private client gallery portal.
+VK Creative Co is a marketing and client-management platform for a creative photography/videography business. It combines a polished public-facing website with a full-featured admin dashboard and private client gallery portal.
 
 ---
 
