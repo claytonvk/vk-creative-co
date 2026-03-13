@@ -1,30 +1,157 @@
-# Marketing website for studio
+# VK Creative Co.
 
-_Automatically synced with your [v0.app](https://v0.app) deployments_
+A modern portfolio and client gallery platform for photography and film, built with **Next.js**, **TypeScript**, and **Supabase**.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/clay-vander-kolks-projects/v0-vk-studios)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/gIha1XqOcpj)
+VK Creative Co. is designed to showcase visual work while also providing a seamless experience for clients to view, download, and interact with their media. The platform focuses on performance, simplicity, and elegant design while supporting real-world workflows for photographers and filmmakers.
+
+---
 
 ## Overview
 
-This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
+This project powers the website and client gallery system for **VK Creative Co.**, a creative studio specializing in photography and Super 8 film.
 
-## Deployment
+The platform serves two primary purposes:
 
-Your project is live at:
+### Public Portfolio
+- Showcase photography and film work
+- Highlight featured projects and services
+- Provide a polished web presence for potential clients
 
-**[https://vercel.com/clay-vander-kolks-projects/v0-vk-studios](https://vercel.com/clay-vander-kolks-projects/v0-vk-studios)**
+### Client Galleries
+- Deliver private galleries to clients
+- Enable secure media access and downloads
+- Provide a streamlined viewing experience across devices
 
-## Build your app
+The goal of the platform is to balance **beautiful presentation** with **fast performance and scalable architecture**.
 
-Continue building your app on:
+---
 
-**[https://v0.app/chat/gIha1XqOcpj](https://v0.app/chat/gIha1XqOcpj)**
+## Tech Stack
 
-## How It Works
+### Frontend
+- Next.js (App Router)
+- React
+- TypeScript
+- Tailwind CSS
 
-1. Create and modify your project using [v0.app](https://v0.app)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+### Backend / Infrastructure
+- Supabase (Postgres database + authentication)
+- Supabase Storage for media delivery
+- REST APIs
+- Server-side rendering and server components
+
+### Development
+- Node.js
+- Git
+- Vercel deployment
+
+---
+
+## Key Features
+
+### Client Galleries
+- Secure, shareable gallery links
+- Responsive grid layouts for images and videos
+- High-resolution image viewing
+- Mobile-first viewing experience
+
+### Portfolio System
+- Curated project pages
+- Lightweight media loading
+- SEO-friendly content structure
+
+### Performance Optimization
+- Optimized image delivery
+- Server-side rendering
+- Lazy loading for large media collections
+
+### Content Management
+- Structured data models for galleries and projects
+- Flexible media organization
+
+---
+
+## Project Structure
+
+```
+/app
+  /gallery
+  /projects
+  /api
+/components
+  /ui
+  /gallery
+  /layout
+/lib
+  supabase
+  utils
+/public
+```
+
+**app/** – Next.js routes and pages  
+**components/** – reusable UI components  
+**lib/** – shared utilities and services  
+**public/** – static assets  
+
+---
+
+## Getting Started
+
+Clone the repository
+
+```bash
+git clone https://github.com/claytonvk/vk-creative-co.git
+```
+
+Install dependencies
+
+```bash
+npm install
+```
+
+Run the development server
+
+```bash
+npm run dev
+```
+
+The app will be available at:
+
+```
+http://localhost:3000
+```
+
+---
+
+## Environment Variables
+
+Create a `.env.local` file and include the following:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+```
+
+These values can be obtained from your Supabase project settings.
+
+---
+
+## Future Improvements
+
+- Client download management
+- Gallery analytics
+- Custom client permissions
+- Video streaming optimization
+- Admin dashboard for gallery management
+
+---
+
+## Author
+
+**Clay VanderKolk**
+
+GitHub  
+https://github.com/claytonvk  
+
+Portfolio  
+https://clayvanderkolk.site
