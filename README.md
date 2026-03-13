@@ -1,157 +1,56 @@
-# VK Creative Co.
+# VK Creative Co
 
-A modern portfolio and client gallery platform for photography and film, built with **Next.js**, **TypeScript**, and **Supabase**.
-
-VK Creative Co. is designed to showcase visual work while also providing a seamless experience for clients to view, download, and interact with their media. The platform focuses on performance, simplicity, and elegant design while supporting real-world workflows for photographers and filmmakers.
+> A full-featured photography & videography portfolio website with client gallery management, built with Next.js 16 and Supabase.
 
 ---
 
 ## Overview
 
-This project powers the website and client gallery system for **VK Creative Co.**, a creative studio specializing in photography and Super 8 film.
+VK Creative Studio is a marketing and client-management platform for a creative photography/videography business. It combines a polished public-facing website with a full-featured admin dashboard and private client gallery portal.
 
-The platform serves two primary purposes:
+---
 
-### Public Portfolio
-- Showcase photography and film work
-- Highlight featured projects and services
-- Provide a polished web presence for potential clients
+## Features
 
-### Client Galleries
-- Deliver private galleries to clients
-- Enable secure media access and downloads
-- Provide a streamlined viewing experience across devices
+### Public Website
+- **Homepage** — Configurable hero, value propositions, featured portfolio work, testimonials, and CTA — all content-managed via the admin dashboard
+- **Portfolio** — Filterable shoot gallery by category with individual shoot detail pages
+- **Investment** — Pricing packages page
+- **About** — Studio about page
+- **Contact** — Contact form with email delivery via Resend
+- **Client Galleries** — Password-protected galleries with three visual themes (Minimal, Romantic, Editorial), individual image downloads, and bulk ZIP download
 
-The goal of the platform is to balance **beautiful presentation** with **fast performance and scalable architecture**.
+### Admin Dashboard
+- Manage portfolio shoots, media, and categories
+- Manage client galleries with file upload and analytics
+- Manage testimonials, packages, FAQs, and value propositions
+- Site-wide settings (hero text, footer content, colors, CTAs)
+- Gallery analytics (view and download tracking)
+
+### Client Portal
+- Secure gallery access via guest link or account login
+- Download individual images or entire galleries
 
 ---
 
 ## Tech Stack
 
-### Frontend
-- Next.js (App Router)
-- React
-- TypeScript
-- Tailwind CSS
-
-### Backend / Infrastructure
-- Supabase (Postgres database + authentication)
-- Supabase Storage for media delivery
-- REST APIs
-- Server-side rendering and server components
-
-### Development
-- Node.js
-- Git
-- Vercel deployment
-
----
-
-## Key Features
-
-### Client Galleries
-- Secure, shareable gallery links
-- Responsive grid layouts for images and videos
-- High-resolution image viewing
-- Mobile-first viewing experience
-
-### Portfolio System
-- Curated project pages
-- Lightweight media loading
-- SEO-friendly content structure
-
-### Performance Optimization
-- Optimized image delivery
-- Server-side rendering
-- Lazy loading for large media collections
-
-### Content Management
-- Structured data models for galleries and projects
-- Flexible media organization
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 16 + React 19 + TypeScript 5 |
+| Styling | Tailwind CSS v4 with oklch color system |
+| UI Components | shadcn/ui (Radix UI + Tailwind) |
+| Forms | react-hook-form + zod |
+| Database | Supabase (PostgreSQL) |
+| Auth | Supabase Auth (admin + client roles) |
+| Email | Resend |
+| File Uploads | tus-js-client with Supabase Storage |
+| Charts | Recharts |
+| Dark Mode | next-themes |
+| Notifications | Sonner |
+| Hosting | Vercel |
 
 ---
 
 ## Project Structure
 
-```
-/app
-  /gallery
-  /projects
-  /api
-/components
-  /ui
-  /gallery
-  /layout
-/lib
-  supabase
-  utils
-/public
-```
-
-**app/** – Next.js routes and pages  
-**components/** – reusable UI components  
-**lib/** – shared utilities and services  
-**public/** – static assets  
-
----
-
-## Getting Started
-
-Clone the repository
-
-```bash
-git clone https://github.com/claytonvk/vk-creative-co.git
-```
-
-Install dependencies
-
-```bash
-npm install
-```
-
-Run the development server
-
-```bash
-npm run dev
-```
-
-The app will be available at:
-
-```
-http://localhost:3000
-```
-
----
-
-## Environment Variables
-
-Create a `.env.local` file and include the following:
-
-```
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-```
-
-These values can be obtained from your Supabase project settings.
-
----
-
-## Future Improvements
-
-- Client download management
-- Gallery analytics
-- Custom client permissions
-- Video streaming optimization
-- Admin dashboard for gallery management
-
----
-
-## Author
-
-**Clay VanderKolk**
-
-GitHub  
-https://github.com/claytonvk  
-
-Portfolio  
-https://clayvanderkolk.site
