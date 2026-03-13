@@ -121,7 +121,7 @@ Dark mode is fully supported via the `.dark` class powered by `next-themes`.
 
 ---
 
-## Deployment
+---
 
 The project is deployed on **[Vercel](https://vercel.com)**. Push to `main` triggers a production deployment automatically.
 
